@@ -23,28 +23,6 @@ steps:
       arguments: "--output $(build.artifactstagingdirectory)"
       zipAfterPublish: "True"
 
-  # Run Unit Tests
-  # - task: DotNetCoreCLI@1
-  #   displayName: Run dotnet test on Sessions Microservice
-  #   inputs:
-  #     command: "test"
-  #     projects: "sessions/src/**/*.Tests.csproj"
-  #     arguments: "--logger trx;logfilename=testresults.xml"
-
-  # - task: DotNetCoreCLI@1
-  #   displayName: Run dotnet test on Shared Code
-  #   inputs:
-  #     command: "test"
-  #     projects: "shared/src/**/*.Tests.csproj"
-  #     arguments: "--logger trx;logfilename=testresults.xml"
-
-  # - task: PublishTestResults@2
-  #   displayName: Publish Test Results
-  #   inputs:
-  #     testRunner: 'VSTest'
-  #     testResultsFiles: '**/testresults.xml'
-  #   condition: always()
-
   # Publish the APIs as an artifact
   - task: PublishBuildArtifacts@1
     displayName: Publish Azure Functions
@@ -60,3 +38,28 @@ steps:
       pathToPublish: deploy
       artifactName: deploy
       artifactType: container
+
+      - task: PowerShell@2
+      inputs:
+        filePath: "$(System.DefaultWorkingDirectory)/deploy/CreateUniqueResourceNameSuffix.ps1"
+  
+    - task: AzureResourceManagerTemplateDeployment@3
+      inputs:
+        deploymentScope: "Resource Group"
+        azureResourceManagerConnection: "Visual Studio Enterprise(2394ff5d-4d73-4134-a00f-2385754aeeb5)"
+        subscriptionId: "2394ff5d-4d73-4134-a00f-2385754aeeb5"
+        action: "Create Or Update Resource Group"
+        resourceGroupName: "MeatGeek-Sessions"
+        location: "West US 2"
+        templateLocation: "Linked artifact"
+        csmFile: "$(System.DefaultWorkingDirectory)/deploy/microservice.json"
+        overrideParameters: "-uniqueResourceNameSuffix $(UniqueResourceNameSuffix) -sessionsMicroserviceApiAppName MeatGeek-Sessions"
+        deploymentMode: "Incremental"
+  
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: "AzureRM"
+        azureSubscription: "Visual Studio Enterprise(2394ff5d-4d73-4134-a00f-2385754aeeb5)"
+        appType: "functionApp"
+        WebAppName: "$(functionsApiAppName)"
+        packageForLinux: "$(Build.ArtifactStagingDirectory)/proxies.zip"

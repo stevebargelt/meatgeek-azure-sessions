@@ -6,20 +6,6 @@
       "type": "string",
       "defaultValue": "[uniqueString(subscription().subscriptionId, resourceGroup().id)]"
     }
-
-    // ,
-
-    // "eventsResourceGroupName": {
-    //   "type": "string"
-    // },
-    // "eventGridTopicName": {
-    //   "type": "string"
-    // },
-
-    // "bigHugeThesaurusApiKey": {
-    //   "type": "string",
-    //   "defaultValue": ""
-    // }
   },
   "variables": {
     "resourceNamePrefix": "mgsess",
@@ -28,17 +14,10 @@
 
     "functionsAppServicePlanName": "[concat(variables('resourceNamePrefix'), 'fnasp', parameters('uniqueResourceNameSuffix'))]",
     "functionsApiAppName": "[concat(variables('resourceNamePrefix'), 'api', parameters('uniqueResourceNameSuffix'))]",
-    "functionsWorkerApiAppName": "[concat(variables('resourceNamePrefix'), 'wapi', parameters('uniqueResourceNameSuffix'))]",
 
     "cosmosDbAccountName": "[concat(variables('resourceNamePrefix'), 'db', parameters('uniqueResourceNameSuffix'))]",
     "cosmosDbDatabaseName": "Sessions",
     "cosmosDbCollectionName": "sessions"
-
-    // "cognitiveServicesAccountName": "[concat(variables('resourceNamePrefix'), 'cs', parameters('uniqueResourceNameSuffix'))]",
-    // "cognitiveServicesSearchApiUrl": "https://api.cognitive.microsoft.com/bing/v7.0/images/search",
-    // "bigHugeThesaurusApiUrl": "http://words.bighugelabs.com/api/2/",
-
-    // "eventGridTopicResourceId": "[resourceId(parameters('eventsResourceGroupName'), 'Microsoft.EventGrid/topics', parameters('eventGridTopicName'))]"
   },
   "resources": [
     {
@@ -121,51 +100,6 @@
       ]
     },
     {
-      "name": "[variables('functionsWorkerApiAppName')]",
-      "type": "Microsoft.Web/sites",
-      "location": "[resourceGroup().location]",
-      "apiVersion": "2016-08-01",
-      "kind": "functionapp",
-      "properties": {
-        "enabled": true,
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('functionsAppServicePlanName'))]",
-        "reserved": false
-      },
-      "identity": {
-        "type": "systemAssigned"
-      },
-      "resources": [
-        {
-          "name": "appsettings",
-          "type": "config",
-          "apiVersion": "2014-11-01",
-          "properties": {
-            "FUNCTIONS_EXTENSION_VERSION": "beta",
-            "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('Microsoft.Insights/components', variables('applicationInsightsName')), '2014-04-01').InstrumentationKey]",
-            // "EventGridTopicEndpoint": "[reference(variables('eventGridTopicResourceId'), '2018-01-01').endpoint]",
-            // "EventGridTopicKey": "[listKeys(variables('eventGridTopicResourceId'), '2018-01-01').key1]",
-            "CosmosDbAccountEndpointUrl": "[reference(variables('cosmosDbAccountName')).documentEndpoint]",
-            "CosmosDbAccountKey": "[listKeys(variables('cosmosDbAccountName'),'2015-04-08').primaryMasterKey]",
-            "DatabaseName": "[variables('cosmosDbDatabaseName')]",
-            "CollectionName": "[variables('cosmosDbCollectionName')]",
-            // "CognitiveServicesSearchApiEndpoint": "[variables('cognitiveServicesSearchApiUrl')]",
-            // "CognitiveServicesSearchApiKey": "[listKeys(variables('cognitiveServicesAccountName'),'2016-02-01-preview').key1]",
-            // "BigHugeThesaurusApiEndpoint": "[variables('bigHugeThesaurusApiUrl')]",
-            // "BigHugeThesaurusApiKey": "[parameters('bigHugeThesaurusApiKey')]",
-            "AzureWebJobsSecretStorageType": "Files"
-          },
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/sites', variables('functionsWorkerApiAppName'))]",
-            "[resourceId('Microsoft.Insights/components', variables('applicationInsightsName'))]"
-            // "[resourceId('Microsoft.CognitiveServices/accounts', variables('cognitiveServicesAccountName'))]"
-          ]
-        }
-      ],
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms', variables('functionsAppServicePlanName'))]"
-      ]
-    },
-    {
       "name": "[variables('cosmosDbAccountName')]",
       "type": "Microsoft.DocumentDB/databaseAccounts",
       "location": "[resourceGroup().location]",
@@ -200,10 +134,6 @@
     "apiAppName": {
       "type": "string",
       "value": "[variables('functionsApiAppName')]"
-    },
-    "workerApiAppName": {
-      "type": "string",
-      "value": "[variables('functionsWorkerApiAppName')]"
     }
   }
 }
