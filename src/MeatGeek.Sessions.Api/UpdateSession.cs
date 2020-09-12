@@ -6,14 +6,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Documents.Client;
-using Microsoft.Azure.Documents.Linq;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using Inferno.Common.Models;
+using MeatGeek.Sessions.Services.Models;
 using Honeycomb;
 
 namespace MeatGeek.Sessions

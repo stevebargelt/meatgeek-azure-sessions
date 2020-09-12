@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Azure.Documents.Client;
-using Inferno.Common.Models;
+using MeatGeek.Sessions.Services.Models;
 using Honeycomb;
 
 #nullable enable
@@ -37,7 +37,7 @@ namespace MeatGeek.Sessions
 
         [FunctionName("GetAllSessions")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "")] HttpRequest req, 
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "sessions")] HttpRequest req, 
                 [CosmosDB(
                 databaseName: "Inferno",
                 collectionName: "sessions",

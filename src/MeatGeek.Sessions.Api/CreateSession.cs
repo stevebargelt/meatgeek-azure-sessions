@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using Inferno.Common.Models;
+using MeatGeek.Sessions.Services.Models;
 using Honeycomb;
 
 namespace MeatGeek.Sessions
@@ -36,7 +36,7 @@ namespace MeatGeek.Sessions
 
         [FunctionName("CreateSession")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "session")] HttpRequest req, 
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "sessions")] HttpRequest req, 
                 [CosmosDB(
                 databaseName: "Inferno",
                 collectionName: "sessions",
