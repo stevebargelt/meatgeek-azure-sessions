@@ -53,7 +53,7 @@ steps:
       location: "West US 2"
       templateLocation: "Linked artifact"
       csmFile: "$(System.DefaultWorkingDirectory)/deploy/microservice.json"
-      overrideParameters: "-uniqueResourceNameSuffix $(UniqueResourceNameSuffix) -sessionsMicroserviceApiAppName MeatGeek-Sessions"
+      overrideParameters: "-uniqueResourceNameSuffix $(UniqueResourceNameSuffix)"
       deploymentMode: "Incremental"
 
   - task: AzureRmWebAppDeployment@4
