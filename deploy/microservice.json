@@ -11,10 +11,8 @@
     "resourceNamePrefix": "mgsess",
 
     "applicationInsightsName": "[concat(variables('resourceNamePrefix'), 'ai', parameters('uniqueResourceNameSuffix'))]",
-
     "functionsAppServicePlanName": "[concat(variables('resourceNamePrefix'), 'fnasp', parameters('uniqueResourceNameSuffix'))]",
     "functionsApiAppName": "[concat(variables('resourceNamePrefix'), 'api', parameters('uniqueResourceNameSuffix'))]",
-
     "cosmosDbAccountName": "[concat(variables('resourceNamePrefix'), 'db', parameters('uniqueResourceNameSuffix'))]",
     "cosmosDbDatabaseName": "Sessions",
     "cosmosDbCollectionName": "sessions"
