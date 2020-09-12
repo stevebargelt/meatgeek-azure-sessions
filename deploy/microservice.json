@@ -113,18 +113,7 @@
           "maxStalenessPrefix": 100
         }
       }
-    } //,
-    // {
-    //   "name": "[variables('cognitiveServicesAccountName')]",
-    //   "type": "Microsoft.CognitiveServices/accounts",
-    //   "location": "global",
-    //   "apiVersion": "2016-02-01-preview",
-    //   "sku": {
-    //     "name": "S1"
-    //   },
-    //   "kind": "Bing.Search.v7",
-    //   "properties": {}
-    // }
+    }
   ],
   "outputs": {
     "cosmosDbAccountName": {
