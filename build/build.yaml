@@ -39,27 +39,27 @@ steps:
       artifactName: deploy
       artifactType: container
 
-      - task: PowerShell@2
-      inputs:
-        filePath: "$(System.DefaultWorkingDirectory)/deploy/CreateUniqueResourceNameSuffix.ps1"
-  
-    - task: AzureResourceManagerTemplateDeployment@3
-      inputs:
-        deploymentScope: "Resource Group"
-        azureResourceManagerConnection: "Visual Studio Enterprise(2394ff5d-4d73-4134-a00f-2385754aeeb5)"
-        subscriptionId: "2394ff5d-4d73-4134-a00f-2385754aeeb5"
-        action: "Create Or Update Resource Group"
-        resourceGroupName: "MeatGeek-Sessions"
-        location: "West US 2"
-        templateLocation: "Linked artifact"
-        csmFile: "$(System.DefaultWorkingDirectory)/deploy/microservice.json"
-        overrideParameters: "-uniqueResourceNameSuffix $(UniqueResourceNameSuffix) -sessionsMicroserviceApiAppName MeatGeek-Sessions"
-        deploymentMode: "Incremental"
-  
-    - task: AzureRmWebAppDeployment@4
-      inputs:
-        ConnectionType: "AzureRM"
-        azureSubscription: "Visual Studio Enterprise(2394ff5d-4d73-4134-a00f-2385754aeeb5)"
-        appType: "functionApp"
-        WebAppName: "$(functionsApiAppName)"
-        packageForLinux: "$(Build.ArtifactStagingDirectory)/proxies.zip"
+  - task: PowerShell@2
+    inputs:
+      filePath: "$(System.DefaultWorkingDirectory)/deploy/CreateUniqueResourceNameSuffix.ps1"
+
+  - task: AzureResourceManagerTemplateDeployment@3
+    inputs:
+      deploymentScope: "Resource Group"
+      azureResourceManagerConnection: "Visual Studio Enterprise(2394ff5d-4d73-4134-a00f-2385754aeeb5)"
+      subscriptionId: "2394ff5d-4d73-4134-a00f-2385754aeeb5"
+      action: "Create Or Update Resource Group"
+      resourceGroupName: "MeatGeek-Sessions"
+      location: "West US 2"
+      templateLocation: "Linked artifact"
+      csmFile: "$(System.DefaultWorkingDirectory)/deploy/microservice.json"
+      overrideParameters: "-uniqueResourceNameSuffix $(UniqueResourceNameSuffix) -sessionsMicroserviceApiAppName MeatGeek-Sessions"
+      deploymentMode: "Incremental"
+
+  - task: AzureRmWebAppDeployment@4
+    inputs:
+      ConnectionType: "AzureRM"
+      azureSubscription: "Visual Studio Enterprise(2394ff5d-4d73-4134-a00f-2385754aeeb5)"
+      appType: "functionApp"
+      WebAppName: "$(functionsApiAppName)"
+      packageForLinux: "$(Build.ArtifactStagingDirectory)/proxies.zip"
