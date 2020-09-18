@@ -16,7 +16,7 @@ param(
     $PartitionKeyPath,
 
     [int]
-    $Throughput = 1000
+    $Throughput = 400
 )
 
 # Find the Cosmos DB account

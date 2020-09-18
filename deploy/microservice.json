@@ -1,19 +1,12 @@
 {
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
-  "parameters": {
-    "uniqueResourceNameSuffix": {
-      "type": "string",
-      "defaultValue": "[uniqueString(subscription().subscriptionId, resourceGroup().id)]"
-    }
-  },
+  "parameters": {},
   "variables": {
-    "resourceNamePrefix": "mgsess",
-
-    "applicationInsightsName": "[concat(variables('resourceNamePrefix'), 'ai', parameters('uniqueResourceNameSuffix'))]",
-    "functionsAppServicePlanName": "[concat(variables('resourceNamePrefix'), 'fnasp', parameters('uniqueResourceNameSuffix'))]",
-    "functionsApiAppName": "[concat(variables('resourceNamePrefix'), 'api', parameters('uniqueResourceNameSuffix'))]",
-    "cosmosDbAccountName": "[concat(variables('resourceNamePrefix'), 'db', parameters('uniqueResourceNameSuffix'))]",
+    "applicationInsightsName": "meatgeek-sessions-appinsights",
+    "functionsAppServicePlanName": "meatgeek-sessions-app-service-plan",
+    "functionsApiAppName": "meatgeek-sessions",
+    "cosmosDbAccountName": "meatgeek-sessions",
     "cosmosDbDatabaseName": "Sessions",
     "cosmosDbCollectionName": "sessions"
   },
@@ -43,11 +36,11 @@
       },
       "kind": "functionapp",
       "properties": {
-        "workerTierName": null,
-        "adminSiteName": null,
-        "hostingEnvironmentProfile": null,
         "perSiteScaling": false,
+        "maximumElasticWorkerCount": 1,
         "reserved": false,
+        "isXenon": false,
+        "hyperV": false,
         "targetWorkerCount": 0,
         "targetWorkerSizeId": 0
       }
@@ -70,7 +63,7 @@
         {
           "name": "appsettings",
           "type": "config",
-          "apiVersion": "2014-11-01",
+          "apiVersion": "2018-11-01",
           "properties": {
             "FUNCTIONS_EXTENSION_VERSION": "beta",
             "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('Microsoft.Insights/components', variables('applicationInsightsName')), '2014-04-01').InstrumentationKey]",
@@ -104,11 +97,38 @@
       "apiVersion": "2015-04-08",
       "kind": "GlobalDocumentDB",
       "properties": {
+        "publicNetworkAccess": "Enabled",
+        "enableAutomaticFailover": false,
+        "enableMultipleWriteLocations": false,
+        "isVirtualNetworkFilterEnabled": false,
+        "virtualNetworkRules": [],
+        "disableKeyBasedMetadataWriteAccess": false,
+        "enableFreeTier": true,
+        "enableAnalyticalStorage": false,
+        "createMode": "Default",
         "databaseAccountOfferType": "Standard",
         "consistencyPolicy": {
           "defaultConsistencyLevel": "Session",
           "maxIntervalInSeconds": 5,
           "maxStalenessPrefix": 100
+        },
+        "locations": [
+          {
+            "locationName": "West US 2",
+            "provisioningState": "Succeeded",
+            "failoverPriority": 0,
+            "isZoneRedundant": false
+          }
+        ],
+        "cors": [],
+        "capabilities": [],
+        "ipRules": [],
+        "backupPolicy": {
+          "type": "Periodic",
+          "periodicModeProperties": {
+            "backupIntervalInMinutes": 240,
+            "backupRetentionIntervalInHours": 8
+          }
         }
       }
     }
