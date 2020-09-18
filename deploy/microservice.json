@@ -8,7 +8,8 @@
     "functionsApiAppName": "meatgeeksessionsapi",
     "cosmosDbAccountName": "meatgeek-sessions",
     "cosmosDbDatabaseName": "Sessions",
-    "cosmosDbCollectionName": "sessions"
+    "cosmosDbCollectionName": "sessions",
+    "applicationConfigName": "inferno-app-configuration"
   },
   "resources": [
     {
@@ -73,7 +74,6 @@
           "name": "appsettings",
           "type": "config",
           "properties": {
-            "APP_CONFIG_CONN_STRING": "Endpoint=https://inferno-app-configuration.azconfig.io;Id=xarG-l2-s0:xG3AocRx/nlvIOtSiPNN;Secret=jOXj6LEC+vnVlsHErvNwBRumuRifd1kcz72T23GTk54=",
             "FUNCTIONS_EXTENSION_VERSION": "~3",
             "FUNCTIONS_WORKER_RUNTIME": "dotnet",
             "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('Microsoft.Insights/components', variables('applicationInsightsName')), '2014-04-01').InstrumentationKey]",
