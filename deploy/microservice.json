@@ -5,7 +5,7 @@
   "variables": {
     "applicationInsightsName": "meatgeek-sessions-appinsights",
     "functionsAppServicePlanName": "meatgeek-sessions-app-service-plan",
-    "functionsApiAppName": "meatgeek-sessions",
+    "functionsApiAppName": "meatgeeksessionsapi",
     "cosmosDbAccountName": "meatgeek-sessions",
     "cosmosDbDatabaseName": "Sessions",
     "cosmosDbCollectionName": "sessions"
