@@ -9,7 +9,7 @@
     "cosmosDbAccountName": "meatgeek-sessions",
     "cosmosDbDatabaseName": "Sessions",
     "cosmosDbCollectionName": "sessions",
-    "storageAccountName": "meatgeek-sessions-api-storage"
+    "storageAccountName": "mgsessapistorage"
   },
   "resources": [
     {
