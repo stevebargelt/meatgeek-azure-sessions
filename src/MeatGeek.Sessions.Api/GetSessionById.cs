@@ -45,7 +45,6 @@ namespace MeatGeek.Sessions
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
-            // log.LogInformation("Id" + d);
 
             if (session == null)
             {
