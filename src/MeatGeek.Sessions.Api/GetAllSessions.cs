@@ -25,7 +25,7 @@ namespace MeatGeek.Sessions
                 databaseName: "Sessions",
                 collectionName: "sessions",
                 ConnectionStringSetting = "CosmosDBConnection")] DocumentClient client,
-                ILogger log, string? traceid, string? parentspanid)
+                ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
