@@ -11,7 +11,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using MeatGeek.Sessions.Services.Models;
-using Honeycomb;
 
 namespace MeatGeek.Sessions
 {
