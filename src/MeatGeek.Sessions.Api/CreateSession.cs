@@ -18,27 +18,12 @@ namespace MeatGeek.Sessions
     public class CreateSession
     {
         private static IConfiguration Configuration { set; get; }
-        private static string HoneycombKey;
-        private static string HoneycombDataset;        
-        private static LibHoney _libHoney;
-
-        public CreateSession(CosmosClient cosmosClient)
-        {
-            Activity.DefaultIdFormat = ActivityIdFormat.W3C;
-            var builder = new ConfigurationBuilder();
-            var connString = Environment.GetEnvironmentVariable("APP_CONFIG_CONN_STRING", EnvironmentVariableTarget.Process);
-            builder.AddAzureAppConfiguration(connString);
-            Configuration = builder.Build();
-            HoneycombKey = Configuration["HoneycombKey"];
-            HoneycombDataset = Configuration["HoneycombDataset"];
-            _libHoney = new LibHoney(HoneycombKey, HoneycombDataset);
-        }
 
         [FunctionName("CreateSession")]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "sessions")] HttpRequest req, 
                 [CosmosDB(
-                databaseName: "Inferno",
+                databaseName: "Sessions",
                 collectionName: "sessions",
                 ConnectionStringSetting = "CosmosDBConnection")] IAsyncCollector<Session> sessions,
             ILogger log)
