@@ -19,7 +19,7 @@ namespace MeatGeek.Sessions
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "sessions/{id}")] HttpRequest req, 
                 [CosmosDB(
-                databaseName: "Inferno",
+                databaseName: "Sessions",
                 collectionName: "sessions",
                 ConnectionStringSetting = "CosmosDBConnection",
                 Id = "{id}", PartitionKey = "inferno1")] Object session,
