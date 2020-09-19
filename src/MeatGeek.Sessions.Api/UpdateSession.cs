@@ -23,7 +23,7 @@ namespace MeatGeek.Sessions
         [FunctionName("UpdateSession")]
         public async Task<IActionResult> Run(
             
-            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "{id}")] HttpRequest req, 
+            [HttpTrigger(AuthorizationLevel.Anonymous, "patch", Route = "{id}")] HttpRequest req, 
                 [CosmosDB(
                 databaseName: "Sessions",
                 collectionName: "sessions",
@@ -38,6 +38,7 @@ namespace MeatGeek.Sessions
 
             Uri sessionCollectionUri = UriFactory.CreateDocumentCollectionUri("Sessions", "sessions");
 
+            var test = client.CreateDatabaseQuery()
             var document = client.CreateDocumentQuery(sessionCollectionUri, 
                             new FeedOptions() { PartitionKey = new Microsoft.Azure.Documents.PartitionKey("inferno1")})
                 .Where(t => t.Id == id)
