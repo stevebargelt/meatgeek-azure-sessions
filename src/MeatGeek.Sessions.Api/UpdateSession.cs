@@ -19,21 +19,13 @@ namespace MeatGeek.Sessions
     public class UpdateSession
     {
         private static IConfiguration Configuration { set; get; }
-        public UpdateSession(CosmosClient cosmosClient)
-        {
-            Activity.DefaultIdFormat = ActivityIdFormat.W3C;
-            var builder = new ConfigurationBuilder();
-            var connString = Environment.GetEnvironmentVariable("APP_CONFIG_CONN_STRING", EnvironmentVariableTarget.Process);
-            builder.AddAzureAppConfiguration(connString);
-            Configuration = builder.Build();
-        }
 
         [FunctionName("UpdateSession")]
         public async Task<IActionResult> Run(
             
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "{id}")] HttpRequest req, 
                 [CosmosDB(
-                databaseName: "Inferno",
+                databaseName: "Sessions",
                 collectionName: "sessions",
                 ConnectionStringSetting = "CosmosDBConnection")] DocumentClient client,
                 ILogger log,
