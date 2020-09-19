@@ -38,7 +38,6 @@ namespace MeatGeek.Sessions
 
             Uri sessionCollectionUri = UriFactory.CreateDocumentCollectionUri("Sessions", "sessions");
 
-            var test = client.CreateDatabaseQuery()
             var document = client.CreateDocumentQuery(sessionCollectionUri, 
                             new FeedOptions() { PartitionKey = new Microsoft.Azure.Documents.PartitionKey("inferno1")})
                 .Where(t => t.Id == id)
