@@ -19,13 +19,21 @@ namespace MeatGeek.Sessions
     public class UpdateSession
     {
         private static IConfiguration Configuration { set; get; }
+        public UpdateSession(CosmosClient cosmosClient)
+        {
+            Activity.DefaultIdFormat = ActivityIdFormat.W3C;
+            var builder = new ConfigurationBuilder();
+            var connString = Environment.GetEnvironmentVariable("APP_CONFIG_CONN_STRING", EnvironmentVariableTarget.Process);
+            builder.AddAzureAppConfiguration(connString);
+            Configuration = builder.Build();
+        }
 
         [FunctionName("UpdateSession")]
         public async Task<IActionResult> Run(
             
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "{id}")] HttpRequest req, 
                 [CosmosDB(
-                databaseName: "Sessions",
+                databaseName: "Inferno",
                 collectionName: "sessions",
                 ConnectionStringSetting = "CosmosDBConnection")] DocumentClient client,
                 ILogger log,
@@ -36,7 +44,7 @@ namespace MeatGeek.Sessions
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             var updatedSession = JsonConvert.DeserializeObject<Session>(requestBody);
 
-            Uri sessionCollectionUri = UriFactory.CreateDocumentCollectionUri("Session", "sessions");
+            Uri sessionCollectionUri = UriFactory.CreateDocumentCollectionUri("Sessions", "sessions");
 
             var document = client.CreateDocumentQuery(sessionCollectionUri, 
                             new FeedOptions() { PartitionKey = new Microsoft.Azure.Documents.PartitionKey("inferno1")})
