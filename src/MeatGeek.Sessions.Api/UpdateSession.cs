@@ -13,35 +13,19 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using MeatGeek.Sessions.Services.Models;
-using Honeycomb;
 
 namespace MeatGeek.Sessions
 {
     public class UpdateSession
     {
         private static IConfiguration Configuration { set; get; }
-        private static string HoneycombKey;
-        private static string HoneycombDataset;        
-        private static LibHoney _libHoney;
-
-        public UpdateSession(CosmosClient cosmosClient)
-        {
-            Activity.DefaultIdFormat = ActivityIdFormat.W3C;
-            var builder = new ConfigurationBuilder();
-            var connString = Environment.GetEnvironmentVariable("APP_CONFIG_CONN_STRING", EnvironmentVariableTarget.Process);
-            builder.AddAzureAppConfiguration(connString);
-            Configuration = builder.Build();
-            HoneycombKey = Configuration["HoneycombKey"];
-            HoneycombDataset = Configuration["HoneycombDataset"];
-            _libHoney = new LibHoney(HoneycombKey, HoneycombDataset);
-        }
 
         [FunctionName("UpdateSession")]
         public async Task<IActionResult> Run(
             
             [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "{id}")] HttpRequest req, 
                 [CosmosDB(
-                databaseName: "Inferno",
+                databaseName: "Sessions",
                 collectionName: "sessions",
                 ConnectionStringSetting = "CosmosDBConnection")] DocumentClient client,
                 ILogger log,
@@ -52,7 +36,7 @@ namespace MeatGeek.Sessions
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             var updatedSession = JsonConvert.DeserializeObject<Session>(requestBody);
 
-            Uri sessionCollectionUri = UriFactory.CreateDocumentCollectionUri("Inferno", "sessions");
+            Uri sessionCollectionUri = UriFactory.CreateDocumentCollectionUri("Session", "sessions");
 
             var document = client.CreateDocumentQuery(sessionCollectionUri, 
                             new FeedOptions() { PartitionKey = new Microsoft.Azure.Documents.PartitionKey("inferno1")})
@@ -62,7 +46,7 @@ namespace MeatGeek.Sessions
 
             if (document == null)
             {
-                log.LogError($"Session {id} not found. It may not exist!");
+                log.LogError($"Session {id} not found.");
                 return new NotFoundResult();
             }
 
