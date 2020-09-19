@@ -23,7 +23,7 @@ namespace MeatGeek.Sessions
         [FunctionName("UpdateSession")]
         public async Task<IActionResult> Run(
             
-            [HttpTrigger(AuthorizationLevel.Anonymous, "patch", Route = "{id}")] HttpRequest req, 
+            [HttpTrigger(AuthorizationLevel.Anonymous, "patch", "put", Route = "{id}")] HttpRequest req, 
                 [CosmosDB(
                 databaseName: "Sessions",
                 collectionName: "sessions",
