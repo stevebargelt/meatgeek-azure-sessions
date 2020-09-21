@@ -177,17 +177,13 @@
             "CosmosDBConnection": "@Microsoft.KeyVault(SecretUri=https://meatgeek-key-vault.vault.azure.net/secrets/CosmosDBConnection/590193adeecf48c5a2c160c79422ee53)",
             "IoTHubConnection": "@Microsoft.KeyVault(SecretUri=https://inferno.vault.azure.net/secrets/IoTHubConnection/9ce5738a8eea4df3a2fab0a1afeb3861)",
             "AzureWebJobStorage": "@Microsoft.KeyVault(SecretUri=https://meatgeek-key-vault.vault.azure.net/secrets/AzureWebJobStorage/d3f25a4273d04f37a00c51d5047dcc05)",
-            // "EventGridTopicEndpoint": "[reference(variables('eventGridTopicResourceId'), '2018-01-01').endpoint]",
-            // "EventGridTopicKey": "[listKeys(variables('eventGridTopicResourceId'), '2018-01-01').key1]",
             "CosmosDbAccountEndpointUrl": "[reference(variables('cosmosDbAccountName')).documentEndpoint]",
             "CosmosDbAccountKey": "[listKeys(variables('cosmosDbAccountName'),'2015-04-08').primaryMasterKey]",
             "DatabaseName": "[variables('cosmosDbDatabaseName')]",
             "CollectionName": "[variables('cosmosDbCollectionName')]",
-            // "CognitiveServicesSearchApiEndpoint": "[variables('cognitiveServicesSearchApiUrl')]",
-            // "CognitiveServicesSearchApiKey": "[listKeys(variables('cognitiveServicesAccountName'),'2016-02-01-preview').key1]",
-            // "BigHugeThesaurusApiEndpoint": "[variables('bigHugeThesaurusApiUrl')]",
-            // "BigHugeThesaurusApiKey": "[parameters('bigHugeThesaurusApiKey')]",
-            "AzureWebJobsSecretStorageType": "Files"
+            "AzureWebJobsSecretStorageType": "Files",
+            "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": "@Microsoft.KeyVault(SecretUri=https://meatgeek-key-vault.vault.azure.net/secrets/AzureWebJobStorage/d3f25a4273d04f37a00c51d5047dcc05)",
+            "WEBSITE_CONTENTSHARE": "meatgeeksessionsapifunctionsapp"
           },
           "dependsOn": [
             "[resourceId('Microsoft.Web/sites', variables('functionsApiAppName'))]",
