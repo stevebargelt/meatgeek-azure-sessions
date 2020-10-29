@@ -27,6 +27,7 @@ namespace MeatGeek.Sessions
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
+            await Task.Yield();
             if (session == null)
             {
                 log.LogInformation($"Session not found");
