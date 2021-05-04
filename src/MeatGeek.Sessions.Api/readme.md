@@ -12,3 +12,4 @@ GetSessionChart: https://meatgeek-sessions.azurewebsites.net/api/chart/%7Bid%7D/
 UpdateSession: https://meatgeek-sessions.azurewebsites.net/api/{id}
 
 SwaggerUI: https://meatgeeksessionsapi.azurewebsites.net/api/swagger/ui
+(working on the proxy connection - CORS error at the moment)
