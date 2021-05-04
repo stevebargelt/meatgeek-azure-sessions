@@ -10,14 +10,14 @@ namespace MeatGeek.Sessions.Configurations
     {
         public override OpenApiInfo Info { get; set; } = new OpenApiInfo()
         {
-            Version = "3.0.0",
+            Version = "1.0.0",
             Title = "MeatGeek Sessions API",
             Description = "An API for reading and managing MeatGeek sessions",
             TermsOfService = new Uri("https://github.com/stevebargelt"),
             Contact = new OpenApiContact()
             {
-                Name = "Contoso",
-                Email = "azfunc-openapi@contoso.com",
+                Name = "Harebrained Apps",
+                Email = "azfunc-openapi@harebrained-apps.com",
                 Url = new Uri("https://github.com/stevebargelt"),
             },
             License = new OpenApiLicense()
