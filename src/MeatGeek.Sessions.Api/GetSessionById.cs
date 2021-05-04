@@ -19,12 +19,11 @@ namespace MeatGeek.Sessions
 {
     public class GetSessionById
     {
-
+        [FunctionName("GetSessionById")]
         [OpenApiOperation(operationId: "GetSessionById", tags: new[] { "id" }, Summary = "Gets teh session", Description = "This gets the session.", Visibility = OpenApiVisibilityType.Important)]
         [OpenApiParameter(name: "id", In = ParameterLocation.Query, Required = true, Type = typeof(string), Summary = "The id", Description = "The id of the session to return", Visibility = OpenApiVisibilityType.Important)]
         [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Summary = "The response", Description = "This returns the response")]
-        [FunctionName("GetSessionById")]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "sessions/{id}")] HttpRequest req, 
                 [CosmosDB(

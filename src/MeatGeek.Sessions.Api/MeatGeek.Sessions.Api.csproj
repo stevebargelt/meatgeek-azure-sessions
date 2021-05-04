@@ -13,13 +13,10 @@
     <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LibHoney" Version="0.9.1">
-      <NoWarn>NU1701</NoWarn>
-    </PackageReference>
     <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.12.0" />
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.0.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.CosmosDB" Version="3.0.7" />
-    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Http" Version="3.1.1" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Http" Version="3.0.12" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.OpenApi" Version="0.7.2-preview" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.OpenApi.Core" Version="0.7.2-preview" />
     <PackageReference Include="Microsoft.Extensions.Configuration.AzureAppConfiguration" Version="3.0.2" />
