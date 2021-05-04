@@ -1,16 +1,19 @@
 using System;
-using System.Collections.Generic;
-using System.Net.Http.Headers;
-using System.Text;
+
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Fluent;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
+using MeatGeek.Sessions.Configurations;
+
 [assembly: FunctionsStartup(typeof(MeatGeek.Sessions.Startup))]
 namespace MeatGeek.Sessions
 {
+    /// <summary>
+    /// This represents the entity to be invoked during the runtime startup.
+    /// </summary>
     public class Startup : FunctionsStartup
     {
         private static IConfigurationRoot configuration = new ConfigurationBuilder()
@@ -19,8 +22,10 @@ namespace MeatGeek.Sessions
             .AddEnvironmentVariables()
             .Build();
 
+        /// <inheritdoc />
         public override void Configure(IFunctionsHostBuilder builder)
         {
+            builder.Services.AddSingleton<AppSettings>();
             // Register the Cosmos DB client as a Singleton.
             builder.Services.AddSingleton<CosmosClient>((s) => {
                 var connectionString = configuration["CosmosDBConnection"];
