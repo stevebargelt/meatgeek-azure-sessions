@@ -51,13 +51,8 @@ steps:
     inputs:
       targetType: "inline"
       script: |
-        # Install @techdocs/cli, mkdocs and mkdocs plugins
-        sudo npm install -g --unsafe-perm=true --allow-root @techdocs/cli 
-
-        sudo pip install mkdocs-techdocs-core==0.*
-
         # Generate
-        sudo techdocs-cli generate --no-docker --source-dir $(Build.SourcesDirectory)/docs
+        sudo npx @techdocs/cli generate --no-docker --source-dir $(Build.SourcesDirectory)/docs --output-dir ./site
 
   - task: Bash@3
     inputs:
