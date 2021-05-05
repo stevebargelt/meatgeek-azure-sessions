@@ -33,7 +33,7 @@ steps:
         sudo pip install mkdocs-techdocs-core==0.*
 
         # Generate
-        techdocs-cli generate --no-docker
+        techdocs-cli generate --no-docker --source-dir $(Build.SourcesDirectory)/docs --output-dir $(build.artifactstagingdirectory)/docs
 
   # Publish the APIs as an artifact
   - task: PublishBuildArtifacts@1
@@ -53,7 +53,7 @@ steps:
 
   # Publish the Docs as an artifact
   - task: PublishBuildArtifacts@1
-    displayName: Publish Azure Functions
+    displayName: Publish TechDocs
     inputs:
       pathToPublish: docs
       artifactName: docs
