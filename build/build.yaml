@@ -44,18 +44,20 @@ steps:
   # Generate TechDocs
   - task: Bash@3
     inputs:
+      displayName: "npm install techdocs and generate techdocs"
       targetType: "inline"
       script: |
         # Install @techdocs/cli, mkdocs and mkdocs plugins
         sudo npm install -g --unsafe-perm=true --allow-root @techdocs/cli 
 
-        sudo pip install mkdocs-techdocs-core==0.*
+        sudo pip3 install mkdocs-techdocs-core==0.*
 
         # Generate
         sudo techdocs-cli generate --no-docker --source-dir $(Build.SourcesDirectory)/docs
 
   - task: Bash@3
     inputs:
+      displayName: "Folder/Tree after TechDocs step"
       targetType: "inline"
       script: |
         echo "After TechDocs"
