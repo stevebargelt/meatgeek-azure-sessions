@@ -24,10 +24,10 @@ steps:
   displayName: Install the Mkdocs
 
 - script: |
-   npm install -g --unsafe-perm=true --allow-root @techdocs/cli 
+   sudo npm install -g --unsafe-perm=true --allow-root @techdocs/cli 
    pip install mkdocs-techdocs-core==0.*
   displayName: npm install techdocs
 
 - script: |
-   techdocs-cli generate --no-docker --source-dir $(Build.SourcesDirectory)/docs
+   sudo techdocs-cli generate --no-docker --source-dir $(Build.SourcesDirectory)/docs
   displayName: "Generate techdocs"
