@@ -23,13 +23,6 @@ steps:
       arguments: "--output $(build.artifactstagingdirectory)"
       zipAfterPublish: "True"
 
-  - task: AzureKeyVault@1
-    inputs:
-      azureSubscription: "Visual Studio Enterprise(2394ff5d-4d73-4134-a00f-2385754aeeb5)"
-      KeyVaultName: "meatgeek-key-vault"
-      SecretsFilter: "*"
-      RunAsPreJob: false
-
   # Generate TechDocs
   - task: Bash@3
     inputs:
