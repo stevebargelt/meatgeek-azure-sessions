@@ -30,7 +30,6 @@ steps:
       script: |
         # Install @techdocs/cli, mkdocs and mkdocs plugins
         sudo npm install -g --unsafe-perm=true --allow-root @techdocs/cli 
-        sudo pip install mkdocs-techdocs-core==0.*
 
         # Generate
         techdocs-cli generate --no-docker --source-dir $(Build.SourcesDirectory)/docs --output-dir $(build.artifactstagingdirectory)/docs
