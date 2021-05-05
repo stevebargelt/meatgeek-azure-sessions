@@ -23,6 +23,28 @@ steps:
       arguments: "--output $(build.artifactstagingdirectory)"
       zipAfterPublish: "True"
 
+  - task: Bash@3
+    inputs:
+      targetType: "inline"
+      script: |
+        echo "Structure of build.artifactstagingdirectory folder of this pipeline:"
+        tree $(build.artifactstagingdirectory) /f
+
+        echo "Structure of Build.SourcesDirectory folder of this pipeline:"
+        tree $(Build.SourcesDirectory) /f
+
+        echo "Build.ArtifactStagingDirectory:" 
+
+        echo "$(Build.ArtifactStagingDirectory)"
+
+        echo "Build.BinariesDirectory:" 
+
+        echo "$(Build.BinariesDirectory)"
+
+        echo "Build.SourcesDirectory:"
+
+        echo "$(Build.SourcesDirectory)"
+
   # Generate TechDocs
   - task: Bash@3
     inputs:
@@ -32,14 +54,12 @@ steps:
         sudo npm install -g --unsafe-perm=true --allow-root @techdocs/cli 
 
         # Generate
-        techdocs-cli generate --no-docker --source-dir $(Build.SourcesDirectory)/docs
+        sudo techdocs-cli generate --no-docker --source-dir $(Build.SourcesDirectory)/docs
 
   - task: Bash@3
     inputs:
       targetType: "inline"
       script: |
-        # Write your commands here
-
         echo "Structure of build.artifactstagingdirectory folder of this pipeline:"
         tree $(build.artifactstagingdirectory) /f
 
