@@ -2,27 +2,6 @@
 
 name: $(BuildID)
 steps:
-  # Build the APIs
-  - task: DotNetCoreCLI@1
-    displayName: Run dotnet restore
-    inputs:
-      command: "restore"
-      projects: "src/**/*.csproj"
-
-  - task: DotNetCoreCLI@1
-    displayName: Run dotnet build
-    inputs:
-      projects: "src/**/*.csproj"
-
-  - task: DotNetCoreCLI@1
-    displayName: Run dotnet publish
-    inputs:
-      command: "publish"
-      publishWebProjects: "False"
-      projects: "src/**/*Api.csproj"
-      arguments: "--output $(build.artifactstagingdirectory)"
-      zipAfterPublish: "True"
-
   - task: Bash@3
     inputs:
       targetType: "inline"
@@ -45,6 +24,22 @@ steps:
         echo "Build.SourcesDirectory:"
 
         echo "$(Build.SourcesDirectory)"
+
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: "3.x"
+      addToPath: true
+      architecture: "x64"
+      displayName: "Setup Environment"
+
+  # Upgrade pip
+  - task: Bash@3
+    inputs:
+      targetType: "inline"
+      script: |
+        sudo python -m pip install --upgrade pip
+      displayName: "Upgrading pip"
+      continueOnError: false
 
   # Generate TechDocs
   - task: Bash@3
@@ -81,6 +76,27 @@ steps:
         echo "Build.SourcesDirectory:"
 
         echo "$(Build.SourcesDirectory)"
+
+  # Build the APIs
+  - task: DotNetCoreCLI@1
+    displayName: Run dotnet restore
+    inputs:
+      command: "restore"
+      projects: "src/**/*.csproj"
+
+  - task: DotNetCoreCLI@1
+    displayName: Run dotnet build
+    inputs:
+      projects: "src/**/*.csproj"
+
+  - task: DotNetCoreCLI@1
+    displayName: Run dotnet publish
+    inputs:
+      command: "publish"
+      publishWebProjects: "False"
+      projects: "src/**/*Api.csproj"
+      arguments: "--output $(build.artifactstagingdirectory)"
+      zipAfterPublish: "True"
 
   # Publish the APIs as an artifact
   - task: PublishBuildArtifacts@1
