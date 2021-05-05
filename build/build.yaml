@@ -23,6 +23,27 @@ steps:
       arguments: "--output $(build.artifactstagingdirectory)"
       zipAfterPublish: "True"
 
+  - task: Bash@3
+    inputs:
+      targetType: "inline"
+      script: |
+        # Write your commands here
+
+        echo "Structure of work folder of this pipeline:"
+        tree $(Agent.WorkFolder)\1 /f
+
+        echo "Build.ArtifactStagingDirectory:" 
+
+        echo "$(Build.ArtifactStagingDirectory)"
+
+        echo "Build.BinariesDirectory:" 
+
+        echo "$(Build.BinariesDirectory)"
+
+        echo "Build.SourcesDirectory:"
+
+        echo "$(Build.SourcesDirectory)"
+
   # Generate TechDocs
   - task: Bash@3
     inputs:
