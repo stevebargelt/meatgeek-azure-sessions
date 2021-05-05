@@ -39,7 +39,7 @@ steps:
     inputs:
       targetType: "inline"
       script: |
-        sudo python -m pip install --upgrade pip
+        sudo -H pip3 install --upgrade pip
       continueOnError: false
 
   # Install TechDocs
