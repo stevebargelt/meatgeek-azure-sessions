@@ -23,3 +23,7 @@ steps:
    pip install mkdocs
   displayName: Install the Mkdocs
 
+- script: |
+   npm install -g --unsafe-perm=true --allow-root @techdocs/cli 
+   pip install mkdocs-techdocs-core==0.*
+  displayName: npm install techdocs
