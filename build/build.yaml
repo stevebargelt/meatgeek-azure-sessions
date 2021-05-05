@@ -27,6 +27,7 @@ steps:
     inputs:
       targetType: "inline"
       script: |
+        echo "Before TechDocs"
         echo "Structure of build.artifactstagingdirectory folder of this pipeline:"
         tree $(build.artifactstagingdirectory) /f
 
@@ -53,6 +54,8 @@ steps:
         # Install @techdocs/cli, mkdocs and mkdocs plugins
         sudo npm install -g --unsafe-perm=true --allow-root @techdocs/cli 
 
+        sudo pip install mkdocs-techdocs-core==0.*
+
         # Generate
         sudo techdocs-cli generate --no-docker --source-dir $(Build.SourcesDirectory)/docs
 
@@ -60,6 +63,7 @@ steps:
     inputs:
       targetType: "inline"
       script: |
+        echo "After TechDocs"
         echo "Structure of build.artifactstagingdirectory folder of this pipeline:"
         tree $(build.artifactstagingdirectory) /f
 
