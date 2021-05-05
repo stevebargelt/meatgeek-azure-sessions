@@ -29,8 +29,11 @@ steps:
       script: |
         # Write your commands here
 
-        echo "Structure of work folder of this pipeline:"
-        tree $(Agent.WorkFolder)\1 /f
+        echo "Structure of build.artifactstagingdirectory folder of this pipeline:"
+        tree $(build.artifactstagingdirectory) /f
+
+        echo "Structure of Build.SourcesDirectory folder of this pipeline:"
+        tree $(Build.SourcesDirectory) /f
 
         echo "Build.ArtifactStagingDirectory:" 
 
