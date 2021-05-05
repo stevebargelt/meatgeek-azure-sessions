@@ -29,7 +29,7 @@ steps:
       targetType: "inline"
       script: |
         # Install @techdocs/cli, mkdocs and mkdocs plugins
-        sudo npm install -g @techdocs/cli
+        sudo npm install -g --unsafe-perm=true --allow-root @techdocs/cli 
         sudo pip install mkdocs-techdocs-core==0.*
 
         # Generate
