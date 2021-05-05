@@ -29,5 +29,6 @@ steps:
   displayName: npm install techdocs
 
 - script: |
-   techdocs-cli generate --no-docker --source-dir $(Build.SourcesDirectory)/docs
+   sudo npx @techdocs/cli generate --source-dir $(Build.SourcesDirectory)/docs
+   
   displayName: "Generate techdocs"
