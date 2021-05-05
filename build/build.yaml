@@ -23,6 +23,17 @@ steps:
       arguments: "--output $(build.artifactstagingdirectory)"
       zipAfterPublish: "True"
 
+  # Generate TechDocs
+  - task: Bash@3
+    inputs:
+      targetType: "inline"
+      script: |
+        # Install @techdocs/cli, mkdocs and mkdocs plugins
+        sudo npm install -g --unsafe-perm=true --allow-root @techdocs/cli 
+
+        # Generate
+        techdocs-cli generate --no-docker --source-dir $(Build.SourcesDirectory)/docs
+
   - task: Bash@3
     inputs:
       targetType: "inline"
@@ -46,17 +57,6 @@ steps:
         echo "Build.SourcesDirectory:"
 
         echo "$(Build.SourcesDirectory)"
-
-  # Generate TechDocs
-  - task: Bash@3
-    inputs:
-      targetType: "inline"
-      script: |
-        # Install @techdocs/cli, mkdocs and mkdocs plugins
-        sudo npm install -g --unsafe-perm=true --allow-root @techdocs/cli 
-
-        # Generate
-        techdocs-cli generate --no-docker --source-dir $(Build.SourcesDirectory)/docs --output-dir $(build.artifactstagingdirectory)/docs
 
   # Publish the APIs as an artifact
   - task: PublishBuildArtifacts@1
