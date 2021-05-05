@@ -3,6 +3,7 @@
 name: $(BuildID)
 steps:
   - task: Bash@3
+    displayName: "Folder/Tree before TechDocs"
     inputs:
       targetType: "inline"
       script: |
@@ -34,17 +35,17 @@ steps:
 
   # Upgrade pip
   - task: Bash@3
+    displayName: "Upgrading pip"
     inputs:
       targetType: "inline"
       script: |
         sudo python -m pip install --upgrade pip
-      displayName: "Upgrading pip"
       continueOnError: false
 
   # Install TechDocs
   - task: Bash@3
+    displayName: "npm install techdocs"
     inputs:
-      displayName: "npm install techdocs"
       targetType: "inline"
       script: |
         # Install @techdocs/cli, mkdocs and mkdocs plugins
@@ -53,16 +54,16 @@ steps:
 
   # Generate TechDocs
   - task: Bash@3
+    displayName: "Generate techdocs"
     inputs:
-      displayName: "Generate techdocs"
       targetType: "inline"
       script: |
         # Generate
         sudo techdocs-cli generate --no-docker --source-dir $(Build.SourcesDirectory)/docs
 
   - task: Bash@3
+    displayName: "Folder/Tree after TechDocs"
     inputs:
-      displayName: "Folder/Tree after TechDocs"
       targetType: "inline"
       script: |
         echo "After TechDocs"
