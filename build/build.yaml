@@ -41,23 +41,28 @@ steps:
       displayName: "Upgrading pip"
       continueOnError: false
 
-  # Generate TechDocs
+  # Install TechDocs
   - task: Bash@3
     inputs:
-      displayName: "npm install techdocs and generate techdocs"
+      displayName: "npm install techdocs"
       targetType: "inline"
       script: |
         # Install @techdocs/cli, mkdocs and mkdocs plugins
         sudo npm install -g --unsafe-perm=true --allow-root @techdocs/cli 
+        sudo pip install mkdocs-techdocs-core==0.*
 
-        sudo pip3 install mkdocs-techdocs-core==0.*
-
+  # Generate TechDocs
+  - task: Bash@3
+    inputs:
+      displayName: "Generate techdocs"
+      targetType: "inline"
+      script: |
         # Generate
         sudo techdocs-cli generate --no-docker --source-dir $(Build.SourcesDirectory)/docs
 
   - task: Bash@3
     inputs:
-      displayName: "Folder/Tree after TechDocs step"
+      displayName: "Folder/Tree after TechDocs"
       targetType: "inline"
       script: |
         echo "After TechDocs"
