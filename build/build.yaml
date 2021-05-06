@@ -9,6 +9,7 @@ trigger:
     exclude:
       - docs
       - mkdocs.yml
+      - build/build-docs.yaml
 pool:
   vmImage: ubuntu-latest
 
