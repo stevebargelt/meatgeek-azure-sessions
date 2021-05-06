@@ -14,30 +14,6 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-  - task: Bash@3
-    displayName: "Folder/Tree before TechDocs"
-    inputs:
-      targetType: "inline"
-      script: |
-        echo "Before TechDocs"
-        echo "Structure of build.artifactstagingdirectory folder of this pipeline:"
-        tree $(build.artifactstagingdirectory) /f
-
-        echo "Structure of Build.SourcesDirectory folder of this pipeline:"
-        tree $(Build.SourcesDirectory) /f
-
-        echo "Build.ArtifactStagingDirectory:" 
-
-        echo "$(Build.ArtifactStagingDirectory)"
-
-        echo "Build.BinariesDirectory:" 
-
-        echo "$(Build.BinariesDirectory)"
-
-        echo "Build.SourcesDirectory:"
-
-        echo "$(Build.SourcesDirectory)"
-
   - task: UsePythonVersion@0
     inputs:
       versionSpec: "3.x"
@@ -73,30 +49,6 @@ steps:
       script: |
         # Generate
         techdocs-cli generate --no-docker
-
-  - task: Bash@3
-    displayName: "Folder/Tree after TechDocs"
-    inputs:
-      targetType: "inline"
-      script: |
-        echo "After TechDocs"
-        echo "Structure of build.artifactstagingdirectory folder of this pipeline:"
-        tree $(build.artifactstagingdirectory) /f
-
-        echo "Structure of Build.SourcesDirectory folder of this pipeline:"
-        tree $(Build.SourcesDirectory) /f
-
-        echo "Build.ArtifactStagingDirectory:" 
-
-        echo "$(Build.ArtifactStagingDirectory)"
-
-        echo "Build.BinariesDirectory:" 
-
-        echo "$(Build.BinariesDirectory)"
-
-        echo "Build.SourcesDirectory:"
-
-        echo "$(Build.SourcesDirectory)"
 
   # Publish the Docs as an artifact
   - task: PublishBuildArtifacts@1
