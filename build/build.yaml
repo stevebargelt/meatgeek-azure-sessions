@@ -1,6 +1,12 @@
 # Builds the MeatGeek sessions microservice resources
-
 name: $(BuildID)
+
+trigger:
+  - main
+
+pool:
+  vmImage: ubuntu-latest
+
 steps:
   - task: Bash@3
     displayName: "Folder/Tree before TechDocs"
@@ -60,7 +66,7 @@ steps:
       targetType: "inline"
       script: |
         # Generate
-        sudo techdocs-cli generate --no-docker --source-dir $(Build.SourcesDirectory)/docs
+        techdocs-cli generate --no-docker --source-dir $(Build.SourcesDirectory)/docs
 
   - task: Bash@3
     displayName: "Folder/Tree after TechDocs"
