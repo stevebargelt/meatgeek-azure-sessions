@@ -17,7 +17,20 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    # The following secrets are required in your CI environment for publishing files to AWS S3.
+    # e.g. You can use GitHub Organization secrets to set them for all existing and new repositories.
+    # env:
+    #   TECHDOCS_S3_BUCKET_NAME: ${{ secrets.TECHDOCS_S3_BUCKET_NAME }}
+    #   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #   AWS_REGION: ${{ secrets.AWS_REGION }}
+    #   ENTITY_NAMESPACE: 'default'
+    #   ENTITY_KIND: 'Component'
+    #   ENTITY_NAME: 'my-doc-entity'
+    # In a Software template, Scaffolder will replace {{cookiecutter.component_id | jsonify}}
+    # with the correct entity name. This is same as metadata.name in the entity's catalog-info.yaml
+    # ENTITY_NAME: '{{ cookiecutter.component_id | jsonify }}'
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -32,4 +45,5 @@ jobs:
         run: python -m pip install mkdocs-techdocs-core==0.*
 
       - name: Generate docs site
-        run: techdocs-cli generate --no-docker --verbose --source-dir docs
+        run: techdocs-cli generate --no-docker --verbose
+        #--source-dir docs
