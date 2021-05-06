@@ -57,7 +57,7 @@ steps:
         # Install @techdocs/cli, mkdocs and mkdocs plugins
         sudo chown -R $USER /usr/local
         npm install -g @techdocs/cli 
-        pip install mkdocs-techdocs-core==0.*
+        pip install mkdocs-techdocs-core
 
   # Generate TechDocs
   - task: Bash@3

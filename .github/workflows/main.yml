@@ -34,5 +34,5 @@ jobs:
         run: |
           sudo chown -R $USER /usr/local
           npm install -g @techdocs/cli
-          pip install mkdocs-techdocs-core==0.*
+          pip install mkdocs-techdocs-core
           techdocs-cli generate --no-docker --source-dir docs
