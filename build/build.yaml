@@ -2,96 +2,17 @@
 name: $(BuildID)
 
 trigger:
-  - main
-
+  branches:
+    include:
+      - main
+  paths:
+    exclude:
+      - docs
+      - mkdocs.yml
 pool:
   vmImage: ubuntu-latest
 
 steps:
-  - task: Bash@3
-    displayName: "Folder/Tree before TechDocs"
-    inputs:
-      targetType: "inline"
-      script: |
-        echo "Before TechDocs"
-        echo "Structure of build.artifactstagingdirectory folder of this pipeline:"
-        tree $(build.artifactstagingdirectory) /f
-
-        echo "Structure of Build.SourcesDirectory folder of this pipeline:"
-        tree $(Build.SourcesDirectory) /f
-
-        echo "Build.ArtifactStagingDirectory:" 
-
-        echo "$(Build.ArtifactStagingDirectory)"
-
-        echo "Build.BinariesDirectory:" 
-
-        echo "$(Build.BinariesDirectory)"
-
-        echo "Build.SourcesDirectory:"
-
-        echo "$(Build.SourcesDirectory)"
-
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: "3.x"
-      addToPath: true
-      architecture: "x64"
-      displayName: "Setup Environment"
-
-  # Upgrade pip
-  - task: Bash@3
-    displayName: "Upgrading pip"
-    inputs:
-      targetType: "inline"
-      script: |
-        sudo -H pip3 install --upgrade pip
-      continueOnError: false
-
-  # Install TechDocs
-  - task: Bash@3
-    displayName: "npm install techdocs"
-    inputs:
-      targetType: "inline"
-      script: |
-        # Install @techdocs/cli, mkdocs and mkdocs plugins
-        sudo chown -R $USER /usr/local
-        npm install -g @techdocs/cli 
-        pip3 install mkdocs-techdocs-core
-
-  # Generate TechDocs
-  - task: Bash@3
-    displayName: "Generate techdocs"
-    inputs:
-      targetType: "inline"
-      script: |
-        # Generate
-        techdocs-cli generate --no-docker
-
-  - task: Bash@3
-    displayName: "Folder/Tree after TechDocs"
-    inputs:
-      targetType: "inline"
-      script: |
-        echo "After TechDocs"
-        echo "Structure of build.artifactstagingdirectory folder of this pipeline:"
-        tree $(build.artifactstagingdirectory) /f
-
-        echo "Structure of Build.SourcesDirectory folder of this pipeline:"
-        tree $(Build.SourcesDirectory) /f
-
-        echo "Build.ArtifactStagingDirectory:" 
-
-        echo "$(Build.ArtifactStagingDirectory)"
-
-        echo "Build.BinariesDirectory:" 
-
-        echo "$(Build.BinariesDirectory)"
-
-        echo "Build.SourcesDirectory:"
-
-        echo "$(Build.SourcesDirectory)"
-
   # Build the APIs
   - task: DotNetCoreCLI@1
     displayName: Run dotnet restore
@@ -127,12 +48,4 @@ steps:
     inputs:
       pathToPublish: deploy
       artifactName: deploy
-      artifactType: container
-
-  # Publish the Docs as an artifact
-  - task: PublishBuildArtifacts@1
-    displayName: Publish TechDocs
-    inputs:
-      pathToPublish: docs
-      artifactName: docs
       artifactType: container
