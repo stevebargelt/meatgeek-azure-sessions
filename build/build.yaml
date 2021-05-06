@@ -66,7 +66,7 @@ steps:
       targetType: "inline"
       script: |
         # Generate
-        techdocs-cli generate --no-docker --source-dir $(Build.SourcesDirectory)/docs
+        techdocs-cli generate --no-docker
 
   - task: Bash@3
     displayName: "Folder/Tree after TechDocs"
