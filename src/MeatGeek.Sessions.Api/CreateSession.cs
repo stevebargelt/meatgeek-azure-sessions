@@ -42,6 +42,10 @@ namespace MeatGeek.Sessions
                 log.LogInformation(requestBody);
                 var input = JsonConvert.DeserializeObject<Session>(requestBody);
 
+                log.LogInformation("SmokerId = " + input.SmokerId);
+                // var NewPartitionKey = $"{input.SmokerId}-{input.StartTime:yyyy-MM}";
+                // log.LogInformation($"Status PartitionKey = {NewPartitionKey}");
+
                 var session = new Session {
                     SmokerId = input.SmokerId,
                     Title = input.Title,

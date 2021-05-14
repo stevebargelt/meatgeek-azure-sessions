@@ -47,7 +47,7 @@ namespace MeatGeek.Sessions
             Uri sessionCollectionUri = UriFactory.CreateDocumentCollectionUri("Sessions", "sessions");
 
             var document = client.CreateDocumentQuery(sessionCollectionUri, 
-                            new FeedOptions() { PartitionKey = new Microsoft.Azure.Documents.PartitionKey("inferno1")})
+                            new FeedOptions() { PartitionKey = new Microsoft.Azure.Documents.PartitionKey(updatedSession.SmokerId)})
                 .Where(t => t.Id == id)
                 .AsEnumerable()
                 .FirstOrDefault();
