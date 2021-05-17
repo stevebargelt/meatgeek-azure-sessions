@@ -30,7 +30,7 @@ namespace MeatGeek.Sessions
                 ConnectionStringSetting = "CosmosDBConnection")] DocumentClient client,
                 ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            log.LogInformation("GetAllSessions triggered");
 
             var sessions = new List<Session>();
             try {
