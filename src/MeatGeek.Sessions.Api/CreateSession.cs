@@ -47,6 +47,7 @@ namespace MeatGeek.Sessions
                 // log.LogInformation($"Status PartitionKey = {NewPartitionKey}");
 
                 var session = new Session {
+                    Id = System.Guid.NewGuid().ToString(),
                     SmokerId = input.SmokerId,
                     Title = input.Title,
                     Description = input.Description,
