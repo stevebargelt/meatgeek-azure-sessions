@@ -31,7 +31,7 @@ namespace MeatGeek.Sessions
                 databaseName: "Sessions",
                 collectionName: "sessions",
                 ConnectionStringSetting = "CosmosDBConnection",
-                Id = "{id}", PartitionKey = "inferno1")] Object session,
+                Id = "{id}", PartitionKey = "meatgeek2")] Object session,
             ILogger log)
         {
             log.LogInformation("GetSessionById triggered");
