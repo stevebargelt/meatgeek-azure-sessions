@@ -40,9 +40,9 @@ namespace MeatGeek.Sessions
             ILogger log)
         {
             var sessionEvent = sessionEvents.FirstOrDefault();
-            log.LogInformation("*****************************************************************************************")
+            log.LogInformation("*****************************************************************************************");
             log.LogInformation("sessionEvent "+sessionEvent);
-            log.LogInformation("*****************************************************************************************")
+            log.LogInformation("*****************************************************************************************");
             var session = JsonConvert.DeserializeObject<Session>(sessionEvents.FirstOrDefault().ToString());
 
             log.LogInformation("SmokerId "+session.SmokerId);
