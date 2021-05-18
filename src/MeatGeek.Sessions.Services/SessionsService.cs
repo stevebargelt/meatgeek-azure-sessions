@@ -47,13 +47,13 @@ namespace MeatGeek.Sessions.Services
             };
             var SessionId = await SessionsRepository.AddSessionAsync(SessionDocument);
             
-            // post a SessionCreated event to Event Grid
-            var eventData = new SessionCreatedEventData
-            {
-                Title = title
-            };
-            var subject = $"{smokerId}/{SessionId}";
-            await EventGridPublisher.PostEventGridEventAsync(EventTypes.Sessions.SessionCreated, subject, eventData);
+            // // post a SessionCreated event to Event Grid
+            // var eventData = new SessionCreatedEventData
+            // {
+            //     Title = title
+            // };
+            // var subject = $"{smokerId}/{SessionId}";
+            // await EventGridPublisher.PostEventGridEventAsync(EventTypes.Sessions.SessionCreated, subject, eventData);
             
             return SessionId;
         }
