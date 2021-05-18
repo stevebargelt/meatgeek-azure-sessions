@@ -14,14 +14,6 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-  - task: DownloadPipelineArtifact@2
-    inputs:
-      buildType: "specific"
-      project: "30f6773c-aaa9-4787-adae-f89abac99210"
-      definition: "15"
-      buildVersionToDownload: "latest"
-      targetPath: "$(Pipeline.Workspace)"
-
   - task: DownloadBuildArtifacts@0
     inputs:
       buildType: "specific"
