@@ -1,58 +1,83 @@
 using System;
+using System.IO;
 using System.Net;
-using System.Collections.Generic;
+using System.Web.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Documents.Linq;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Microsoft.Azure.Documents.Client;
-using MeatGeek.Sessions.Services.Models;
+using Newtonsoft.Json;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
-using Microsoft.OpenApi.Models;
+
+
+using MeatGeek.Sessions.Services;
+using MeatGeek.Sessions.Services.Models;
+using MeatGeek.Sessions.Services.Converters;
+using MeatGeek.Sessions.Services.Models.Request;
+using MeatGeek.Sessions.Services.Models.Results;
+using MeatGeek.Sessions.Services.Models.Response;
+using MeatGeek.Sessions.Services.Repositories;
+using MeatGeek.Shared;
 
 #nullable enable
 namespace MeatGeek.Sessions
 {
    public class GetAllSessions
     {
+
+        private const string JsonContentType = "application/json";
+        private static readonly ISessionsService SessionsService = new SessionsService(new SessionsRepository(), new EventGridPublisherService());
+
         [FunctionName("GetAllSessions")]
         [OpenApiOperation(operationId: "GetAllSessions", tags: new[] { "session" }, Summary = "Returns all sessions", Description = "Returns all sessions. Sessions are cooking / BBQ Sessions or cooks.", Visibility = OpenApiVisibilityType.Important)]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(List<Session>), Summary = "successful operation", Description = "successful response")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(SessionSummaries), Summary = "successful operation", Description = "successful response")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "sessions")] HttpRequest req, 
-                [CosmosDB(
-                databaseName: "Sessions",
-                collectionName: "sessions",
-                ConnectionStringSetting = "CosmosDBConnection")] DocumentClient client,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "sessions")] HttpRequest req,
                 ILogger log)
         {
             log.LogInformation("GetAllSessions triggered");
 
-            var sessions = new List<Session>();
-            try {
-                Uri sessionCollectionUri = UriFactory.CreateDocumentCollectionUri(databaseId: "Sessions", collectionId: "sessions");
-                IDocumentQuery<Session> query = client.CreateDocumentQuery<Session>(sessionCollectionUri).AsDocumentQuery();
-                while (query.HasMoreResults)
-                {
-                    foreach (Session session in await query.ExecuteNextAsync())
-                    {
-                        sessions.Add(session);
-                    }
-                }  
-            }
-            catch {
-                return new NotFoundResult();
-            }
+            var smokerID = "meatgeek2";
+            //TODO: Get SmokerID
+            // get the user ID
+            // if (! await UserAuthenticationService.GetUserIdAsync(req, out var userId, out var responseResult))
+            // {
+            //     return responseResult;
+            // }
 
-            if (sessions == null || sessions.Count == 0)
+            // list the categories
+            try
             {
-                return new NotFoundResult();
+                var summaries = await SessionsService.GetSessionsAsync(smokerID);
+                if (summaries == null)
+                {
+                    return new NotFoundResult();
+                }
+
+                // serialise the summaries using a custom converter
+                var settings = new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    Formatting = Formatting.Indented
+                };
+                settings.Converters.Add(new SessionSummariesConverter());
+                var json = JsonConvert.SerializeObject(summaries, settings);
+
+                return new ContentResult
+                {
+                    Content = json,
+                    ContentType = JsonContentType,
+                    StatusCode = StatusCodes.Status200OK
+                };
             }
-            return new OkObjectResult(sessions);
+            catch (Exception ex)
+            {
+                log.LogError("Unhandled exception", ex);
+                return new ExceptionResult(ex, false);
+            }
         }
     }       
 
