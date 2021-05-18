@@ -29,15 +29,6 @@ steps:
   - checkout: self
   - checkout: shared
 
-  - task: DownloadBuildArtifacts@0
-    inputs:
-      buildType: "specific"
-      project: "30f6773c-aaa9-4787-adae-f89abac99210"
-      pipeline: "15"
-      buildVersionToDownload: "latest"
-      downloadType: "single"
-      downloadPath: "$(System.ArtifactsDirectory)"
-
   # Build the APIs
   - task: DotNetCoreCLI@1
     displayName: Run dotnet restore
