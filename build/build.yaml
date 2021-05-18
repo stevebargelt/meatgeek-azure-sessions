@@ -1,19 +1,33 @@
 # Builds the MeatGeek sessions microservice resources
 name: $(BuildID)
 
-trigger:
-  branches:
-    include:
-      - main
-  paths:
-    exclude:
-      - docs
-      - mkdocs.yml
-      - build/build-docs.yaml
+resources:
+  repositories:
+    - repository: self
+      type: github
+      endpoint: stevebargelt
+      name: stevebargelt/meatgeek-azure-sessions
+      trigger:
+        branches:
+          include:
+            - main
+        paths:
+          exclude:
+            - docs
+            - mkdocs.yml
+            - build/build-docs.yaml
+
+    - repository: shared
+      type: github
+      endpoint: stevebargelt
+      name: stevebargelt/MeatGeek-Shared
+
 pool:
   vmImage: ubuntu-latest
 
 steps:
+- checkout: self
+- checkout: shared
   - task: DownloadBuildArtifacts@0
     inputs:
       buildType: "specific"
