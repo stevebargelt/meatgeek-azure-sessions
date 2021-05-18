@@ -22,25 +22,25 @@ namespace MeatGeek.Sessions
         /// <inheritdoc />
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            // // SOURCE
-            // //this pattern: https://athousanddevelopers.blogspot.com/2020/05/c-azure-functions-v2-injecting.html 
+            // SOURCE
+            //this pattern: https://athousanddevelopers.blogspot.com/2020/05/c-azure-functions-v2-injecting.html 
 
-            // // Get the original configuration provider from the Azure Function
-			// var configuration = builder.Services.BuildServiceProvider().GetService<IConfiguration>();
+            // Get the original configuration provider from the Azure Function
+			var configuration = builder.Services.BuildServiceProvider().GetService<IConfiguration>();
 
-            // // Create a new IConfigurationRoot and add our configuration along with Azure's original configuration 
-			// this.Configuration = new ConfigurationBuilder()
-            //     .SetBasePath(Environment.CurrentDirectory)
-            //     .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-            //     .AddConfiguration(configuration) // Add the original function configuration
-            //     .AddEnvironmentVariables()
-            //     .Build();
+            // Create a new IConfigurationRoot and add our configuration along with Azure's original configuration 
+			this.Configuration = new ConfigurationBuilder()
+                .SetBasePath(Environment.CurrentDirectory)
+                .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
+                .AddConfiguration(configuration) // Add the original function configuration
+                .AddEnvironmentVariables()
+                .Build();
 
-			// // Replace the Azure Function configuration with our new one
+			// Replace the Azure Function configuration with our new one
 
-            // builder.Services.AddSingleton<IConfiguration>(this.Configuration);
-            
-            //TODO: do we need?? builder.Services.AddSingleton<AppSettings>();
+            builder.Services.AddSingleton<IConfiguration>(this.Configuration);
+            //TODO: what does this do exactly?
+            builder.Services.AddSingleton<AppSettings>();
             this.ConfigureServices(builder.Services);
 
         }

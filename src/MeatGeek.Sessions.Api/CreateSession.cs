@@ -26,15 +26,7 @@ namespace MeatGeek.Sessions
     public class CreateSession
     {
         // private static HttpClient _httpClient;
-        private IConfiguration _configuration;
-
-
-        // // Use Dependency Injection to inject the Cosmos DB client that were configured in Startup.cs.
-        public CreateSession(IConfiguration configuration)
-        {
-            //_httpClient = HttpClient;
-            _configuration = configuration;
-        }
+        //private IConfiguration _configuration;
 
         [FunctionName("CreateSession")]
         [OpenApiOperation(operationId: "CreateSession", tags: new[] { "session" }, Summary = "Start a new session.", Description = "This add a new session (sessions are 'cooks' or BBQ sessions).", Visibility = OpenApiVisibilityType.Important)]
