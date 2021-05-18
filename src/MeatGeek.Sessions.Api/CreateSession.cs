@@ -2,6 +2,8 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Net.Http;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,15 +14,25 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using MeatGeek.Sessions.Services.Models;
+using Microsoft.Azure.EventGrid;
+using Microsoft.Azure.EventGrid.Models;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
+
 
 namespace MeatGeek.Sessions
 {
 
     public class CreateSession
     {
-        private static IConfiguration Configuration { set; get; }
+        // private static HttpClient _httpClient;
+
+
+        // // Use Dependency Injection to inject the Cosmos DB client that were configured in Startup.cs.
+        // public CreateSession(IHttpClient httpClient)
+        // {
+        //     _httpClient = HttpClient;
+        // }
 
         [FunctionName("CreateSession")]
         [OpenApiOperation(operationId: "CreateSession", tags: new[] { "session" }, Summary = "Start a new session.", Description = "This add a new session (sessions are 'cooks' or BBQ sessions).", Visibility = OpenApiVisibilityType.Important)]
@@ -30,8 +42,8 @@ namespace MeatGeek.Sessions
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "sessions")] HttpRequest req, 
                 [CosmosDB(
-                databaseName: "Sessions",
-                collectionName: "sessions",
+                databaseName: "DatabaseName",
+                collectionName: "CollectionName",
                 ConnectionStringSetting = "CosmosDBConnection")] IAsyncCollector<Session> sessions,
             ILogger log)
         {
@@ -56,6 +68,39 @@ namespace MeatGeek.Sessions
                     TimeStamp = DateTime.UtcNow
                 };
                 await sessions.AddAsync(session);
+
+                // Start New EventGrid Stuffs
+
+                // var eventGridEventList = new List<EventGridEvent>();
+
+                // var topicCredentials =
+                //     new TopicCredentials(Configuration.);
+                //     //Environment.GetEnvironmentVariable("AzureEventGrid:TopicKey")
+
+                // var eventGridClient =
+                //     new EventGridClient(
+                //         topicCredentials, _httpClient, false);
+
+                // var eventGridEvent = new EventGridEvent()
+                //     {
+                //         Id = Guid.NewGuid().ToString(),
+                //         Subject = $"/persons/{session.Id}",
+                //         EventType = "Person.Created",
+                //         Data = session,
+                //         EventTime = DateTime.Now,
+                //         DataVersion = "1.0"
+                //     };
+
+                // eventGridEventList.Add(eventGridEvent);
+                // log.LogInformation($"Sending one event to Azure Event Grid for processing.");
+
+                // await eventGridClient.PublishEventsAsync(new Uri(Environment.GetEnvironmentVariable("AzureEventGrid:TopicEndpoint")).Host,
+                // eventGridEventList);
+
+                // End New Event Grid Stuffs
+
+
+
                 return new OkObjectResult(session);
             }
             catch (Exception ex)
