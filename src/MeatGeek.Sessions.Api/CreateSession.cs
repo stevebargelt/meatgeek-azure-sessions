@@ -36,8 +36,8 @@ namespace MeatGeek.Sessions
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "sessions")] HttpRequest req, 
                 [CosmosDB(
-                databaseName: "DatabaseName",
-                collectionName: "CollectionName",
+                databaseName: "Sessions",
+                collectionName: "sessions",
                 ConnectionStringSetting = "CosmosDBConnection")] IAsyncCollector<Session> sessions,
             ILogger log)
         {
