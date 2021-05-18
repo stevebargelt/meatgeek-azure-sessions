@@ -62,6 +62,6 @@ steps:
   - task: PublishBuildArtifacts@1
     displayName: Publish Deployment Scripts
     inputs:
-      pathToPublish: deploy
+      pathToPublish: meatgeek-azure-sessions/deploy
       artifactName: deploy
       artifactType: container
