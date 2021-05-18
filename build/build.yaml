@@ -28,6 +28,7 @@ pool:
 steps:
 - checkout: self
 - checkout: shared
+  
   - task: DownloadBuildArtifacts@0
     inputs:
       buildType: "specific"
