@@ -27,13 +27,15 @@ namespace MeatGeek.Sessions
     {
         private readonly ILogger<CreateSession> _log;
         private const string JsonContentType = "application/json";
-        private static readonly ISessionsService SessionsService = new SessionsService(new SessionsRepository(), new EventGridPublisherService());
-        //private readonly ISessionsService SessionsService; 
+        //private static readonly ISessionsService SessionsService = new SessionsService(new SessionsRepository(), new EventGridPublisherService());
+        private readonly ISessionsServiceDI _sessionsServiceDI; 
+        private ISessionsRepository SessionsRepository = new SessionsRepository();
+        private IEventGridPublisherService EventGridPublisher = new EventGridPublisherService();
 
-        public CreateSession(ILogger<CreateSession> log) //, ISessionsService sessionService
+        public CreateSession(ILogger<CreateSession> log, ISessionsServiceDI sessionsServiceDI)
         {
             _log = log;
-            //SessionsService = sessionService;
+            _sessionsServiceDI = sessionsServiceDI;
         }
 
         [FunctionName("CreateSession")]
@@ -79,7 +81,7 @@ namespace MeatGeek.Sessions
                 _log.LogInformation("data.Title = " + data.Title);
                 _log.LogInformation("data.SmokerId = " + data.SmokerId);
                 _log.LogInformation("data.StartTime = " + data.StartTime.Value);
-                var sessionId = await SessionsService.AddSessionAsync(data.Title, data.SmokerId, data.StartTime.Value);
+                var sessionId = await _sessionsServiceDI.AddSessionAsync(data.Title, data.SmokerId, data.StartTime.Value, SessionsRepository, EventGridPublisher);
                 _log.LogInformation("AFTER SessionService Call");
                 return new OkObjectResult(new { id = sessionId });
             }

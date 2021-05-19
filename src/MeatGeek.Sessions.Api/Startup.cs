@@ -2,8 +2,8 @@ using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MeatGeek.Sessions.Services;
-using MeatGeek.Sessions.Services.Repositories;
-using MeatGeek.Shared;
+// using MeatGeek.Sessions.Services.Repositories;
+// using MeatGeek.Shared;
 
 using Microsoft.Extensions.Logging;
 
@@ -19,7 +19,7 @@ namespace MeatGeek.Sessions
         public override void Configure(IFunctionsHostBuilder builder)
         {
 
-            //builder.Services.AddSingleton<ISessionsService>(new SessionsService(new SessionsRepository(), new EventGridPublisherService()));
+            builder.Services.AddScoped<ISessionsServiceDI, SessionsServiceDI>();
         }
 
     }
