@@ -87,7 +87,7 @@ namespace MeatGeek.Sessions
             }
             catch (Exception ex)
             {
-                _log.LogError("Unhandled exception", ex.ToString());
+                _log.LogError(ex, "<-- Exception from CreateSession");
                 return new ExceptionResult(ex, false);
             }
         }
