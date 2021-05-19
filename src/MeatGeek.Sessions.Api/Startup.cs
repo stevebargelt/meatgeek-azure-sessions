@@ -19,7 +19,7 @@ namespace MeatGeek.Sessions
         public override void Configure(IFunctionsHostBuilder builder)
         {
 
-            builder.Services.AddSingleton<ISessionsService>(new SessionsService(new SessionsRepository(), new EventGridPublisherService()));
+            //builder.Services.AddSingleton<ISessionsService>(new SessionsService(new SessionsRepository(), new EventGridPublisherService()));
         }
 
     }

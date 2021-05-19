@@ -27,13 +27,13 @@ namespace MeatGeek.Sessions
     {
         private readonly ILogger<CreateSession> _log;
         private const string JsonContentType = "application/json";
-        //private static readonly ISessionsService SessionsService = new SessionsService(new SessionsRepository(), new EventGridPublisherService());
-        private readonly ISessionsService SessionsService; 
+        private static readonly ISessionsService SessionsService = new SessionsService(new SessionsRepository(), new EventGridPublisherService());
+        //private readonly ISessionsService SessionsService; 
 
-        public CreateSession(ILogger<CreateSession> log, ISessionsService sessionService)
+        public CreateSession(ILogger<CreateSession> log) //, ISessionsService sessionService
         {
             _log = log;
-            SessionsService = sessionService;
+            //SessionsService = sessionService;
         }
 
         [FunctionName("CreateSession")]
@@ -75,12 +75,14 @@ namespace MeatGeek.Sessions
             // create session
             try
             {
+                _log.LogInformation("BEFORE SessionService Call");
                 var sessionId = await SessionsService.AddSessionAsync(data.Title, data.SmokerId, data.StartTime.Value);
+                _log.LogInformation("AFTER SessionService Call");
                 return new OkObjectResult(new { id = sessionId });
             }
             catch (Exception ex)
             {
-                _log.LogError("Unhandled exception", ex);
+                _log.LogError("Unhandled exception", ex.ToString());
                 return new ExceptionResult(ex, false);
             }
         }

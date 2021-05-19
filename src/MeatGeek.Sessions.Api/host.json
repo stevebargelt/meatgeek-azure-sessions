@@ -3,7 +3,9 @@
   "logging": {
     "fileLoggingMode": "debugOnly",
     "logLevel": {
-      "MeatGeek.Sessions": "Information"
+      "MeatGeek.Sessions": "Information",
+      "MeatGeek.Sessions.Services": "Information",
+      "default": "Information"
     }
   }
 }
