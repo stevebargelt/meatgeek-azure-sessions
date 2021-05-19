@@ -64,7 +64,7 @@ namespace MeatGeek.Sessions.Services
             
             _log.LogInformation("subject = " + subject);
 
-            await EventGridPublisher.PostEventGridEventAsync(EventTypes.Sessions.SessionCreated, subject, eventData);
+            // await EventGridPublisher.PostEventGridEventAsync(EventTypes.Sessions.SessionCreated, subject, eventData);
             
             return SessionId;
         }
