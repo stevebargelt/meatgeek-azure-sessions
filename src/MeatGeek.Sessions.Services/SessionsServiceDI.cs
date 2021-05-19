@@ -54,7 +54,15 @@ namespace MeatGeek.Sessions.Services
             
             _log.LogInformation("subject = " + subject);
 
-            await eventGridPublisher.PostEventGridEventAsync(EventTypes.Sessions.SessionCreated, subject, eventData);
+            try 
+            {
+                await eventGridPublisher.PostEventGridEventAsync(EventTypes.Sessions.SessionCreated, subject, eventData);
+            }
+            catch (Exception ex)
+            {
+                _log.LogError("Unhandled exception", ex.ToString());
+    
+            }
             
             return SessionId;
         }
