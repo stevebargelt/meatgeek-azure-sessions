@@ -31,10 +31,11 @@ namespace MeatGeek.Sessions.Services
     {
         protected ISessionsRepository SessionsRepository;
         protected IEventGridPublisherService EventGridPublisher;
-        ILogger log;
-        
-        public SessionsService(ISessionsRepository sessionsRepository, IEventGridPublisherService eventGridPublisher)
+        public ILogger<SessionsService> Logger { get; }
+
+        public SessionsService(ILogger<SessionsService> logger, ISessionsRepository sessionsRepository, IEventGridPublisherService eventGridPublisher)
         {
+            Logger = logger ?? throw new ArgumentNullException(nameof(logger));
             SessionsRepository = sessionsRepository;
             EventGridPublisher = eventGridPublisher;
         }
@@ -49,7 +50,7 @@ namespace MeatGeek.Sessions.Services
                 StartTime = startTime
             };
             var SessionId = await SessionsRepository.AddSessionAsync(SessionDocument);
-            log.LogInformation("SessionId = " + SessionId);
+            Logger.LogInformation("SessionId = " + SessionId);
             
             // post a SessionCreated event to Event Grid
             var eventData = new SessionCreatedEventData
@@ -58,7 +59,7 @@ namespace MeatGeek.Sessions.Services
             };
             var subject = $"{smokerId}/{SessionId}";
             
-            log.LogInformation("subject = " + subject);
+            Logger.LogInformation("subject = " + subject);
 
             await EventGridPublisher.PostEventGridEventAsync(EventTypes.Sessions.SessionCreated, subject, eventData);
             
