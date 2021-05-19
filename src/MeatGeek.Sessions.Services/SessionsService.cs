@@ -9,6 +9,8 @@ using MeatGeek.Sessions.Services.Repositories;
 using MeatGeek.Shared;
 using MeatGeek.Shared.EventSchemas.Sessions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Azure.Functions.Extensions;
+using Microsoft.Extensions.Http;
 
 // using ContentReactor.Shared.EventSchemas.Images;
 // using ContentReactor.Shared.EventSchemas.Text;
@@ -27,17 +29,18 @@ namespace MeatGeek.Sessions.Services
         // Task ProcessDeleteItemEventAsync(EventGridEvent eventToProcess, string smokerId);
     }
 
+    
     public class SessionsService : ISessionsService
     {
+        private readonly ILogger<SessionsService> _log;
         protected ISessionsRepository SessionsRepository;
         protected IEventGridPublisherService EventGridPublisher;
-        public ILogger<SessionsService> Logger { get; }
-
-        public SessionsService(ILogger<SessionsService> logger, ISessionsRepository sessionsRepository, IEventGridPublisherService eventGridPublisher)
+        
+        public SessionsService(ISessionsRepository sessionsRepository, IEventGridPublisherService eventGridPublisher)
         {
-            Logger = logger ?? throw new ArgumentNullException(nameof(logger));
             SessionsRepository = sessionsRepository;
             EventGridPublisher = eventGridPublisher;
+            //_log = log;
         }
 
         public async Task<string> AddSessionAsync(string title, string smokerId, DateTime startTime)
@@ -50,7 +53,7 @@ namespace MeatGeek.Sessions.Services
                 StartTime = startTime
             };
             var SessionId = await SessionsRepository.AddSessionAsync(SessionDocument);
-            Logger.LogInformation("SessionId = " + SessionId);
+            _log.LogInformation("SessionId = " + SessionId);
             
             // post a SessionCreated event to Event Grid
             var eventData = new SessionCreatedEventData
@@ -59,7 +62,7 @@ namespace MeatGeek.Sessions.Services
             };
             var subject = $"{smokerId}/{SessionId}";
             
-            Logger.LogInformation("subject = " + subject);
+            _log.LogInformation("subject = " + subject);
 
             await EventGridPublisher.PostEventGridEventAsync(EventTypes.Sessions.SessionCreated, subject, eventData);
             

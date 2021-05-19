@@ -25,8 +25,16 @@ namespace MeatGeek.Sessions
 
     public class CreateSession
     {
+        private readonly ILogger<CreateSession> _log;
         private const string JsonContentType = "application/json";
-        private static readonly ISessionsService SessionsService = new SessionsService(new SessionsRepository(), new EventGridPublisherService());
+        //private static readonly ISessionsService SessionsService = new SessionsService(new SessionsRepository(), new EventGridPublisherService());
+        private readonly ISessionsService SessionsService; 
+
+        public CreateSession(ILogger<CreateSession> log, ISessionsService sessionService)
+        {
+            _log = log;
+            SessionsService = sessionService;
+        }
 
         [FunctionName("CreateSession")]
         [OpenApiOperation(operationId: "CreateSession", tags: new[] { "session" }, Summary = "Start a new session.", Description = "This add a new session (sessions are 'cooks' or BBQ sessions).", Visibility = OpenApiVisibilityType.Important)]
@@ -34,10 +42,9 @@ namespace MeatGeek.Sessions
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(SessionDetails), Summary = "New session details added", Description = "New session details added")]
         [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.MethodNotAllowed, Summary = "Invalid input", Description = "Invalid input")]        
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "sessions")] HttpRequest req, 
-            ILogger log)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "sessions")] HttpRequest req)
         {
-            log.LogInformation("CreateSession API Triggered");
+            _log.LogInformation("CreateSession API Triggered");
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             CreateSessionRequest data;
             try
@@ -73,7 +80,7 @@ namespace MeatGeek.Sessions
             }
             catch (Exception ex)
             {
-                log.LogError("Unhandled exception", ex);
+                _log.LogError("Unhandled exception", ex);
                 return new ExceptionResult(ex, false);
             }
         }
