@@ -8,6 +8,8 @@ using MeatGeek.Sessions.Services.Models.Results;
 using MeatGeek.Sessions.Services.Repositories;
 using MeatGeek.Shared;
 using MeatGeek.Shared.EventSchemas.Sessions;
+using Microsoft.Extensions.Logging;
+
 // using ContentReactor.Shared.EventSchemas.Images;
 // using ContentReactor.Shared.EventSchemas.Text;
 
@@ -29,6 +31,7 @@ namespace MeatGeek.Sessions.Services
     {
         protected ISessionsRepository SessionsRepository;
         protected IEventGridPublisherService EventGridPublisher;
+        ILogger log;
         
         public SessionsService(ISessionsRepository sessionsRepository, IEventGridPublisherService eventGridPublisher)
         {
@@ -46,6 +49,7 @@ namespace MeatGeek.Sessions.Services
                 StartTime = startTime
             };
             var SessionId = await SessionsRepository.AddSessionAsync(SessionDocument);
+            log.LogInformation("SessionId = " + SessionId);
             
             // post a SessionCreated event to Event Grid
             var eventData = new SessionCreatedEventData
@@ -53,6 +57,9 @@ namespace MeatGeek.Sessions.Services
                 Title = title
             };
             var subject = $"{smokerId}/{SessionId}";
+            
+            log.LogInformation("subject = " + subject);
+
             await EventGridPublisher.PostEventGridEventAsync(EventTypes.Sessions.SessionCreated, subject, eventData);
             
             return SessionId;
