@@ -76,6 +76,9 @@ namespace MeatGeek.Sessions
             try
             {
                 _log.LogInformation("BEFORE SessionService Call");
+                _log.LogInformation("data.Title = " + data.Title);
+                _log.LogInformation("data.SmokerId = " + data.SmokerId);
+                _log.LogInformation("data.StartTime = " + data.StartTime.Value);
                 var sessionId = await SessionsService.AddSessionAsync(data.Title, data.SmokerId, data.StartTime.Value);
                 _log.LogInformation("AFTER SessionService Call");
                 return new OkObjectResult(new { id = sessionId });
