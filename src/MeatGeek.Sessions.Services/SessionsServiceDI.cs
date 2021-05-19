@@ -43,7 +43,7 @@ namespace MeatGeek.Sessions.Services
                 StartTime = startTime
             };
             var SessionId = await sessionsRepository.AddSessionAsync(SessionDocument);
-            _log.LogInformation("SessionId = " + SessionId);
+            // _log.LogInformation("SessionId = " + SessionId);
             
             // post a SessionCreated event to Event Grid
             var eventData = new SessionCreatedEventData
@@ -52,7 +52,7 @@ namespace MeatGeek.Sessions.Services
             };
             var subject = $"{smokerId}/{SessionId}";
             
-            _log.LogInformation("subject = " + subject);
+            // _log.LogInformation("subject = " + subject);
 
             await eventGridPublisher.PostEventGridEventAsync(EventTypes.Sessions.SessionCreated, subject, eventData);
             
