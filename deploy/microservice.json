@@ -178,7 +178,7 @@
             "IoTHubConnection": "@Microsoft.KeyVault(SecretUri=https://inferno.vault.azure.net/secrets/IoTHubConnection/9ce5738a8eea4df3a2fab0a1afeb3861)",
             "AzureWebJobStorage": "@Microsoft.KeyVault(SecretUri=https://meatgeek-key-vault.vault.azure.net/secrets/AzureWebJobStorage/d3f25a4273d04f37a00c51d5047dcc05)",
             "EventGridTopicEndpoint": "@Microsoft.KeyVault(SecretUri=https://meatgeek-key-vault.vault.azure.net/secrets/EventGridTopicEndpoint/b185033da110466aa1a7aba050a5debb)",
-            "EventGridTopicKey": "@Microsoft.KeyVault(SecretUrl=https://meatgeek-key-vault.vault.azure.net/secrets/EventGridTopicKey/a3aa4c7c3dd9433d8e823a9aecb9816b)",
+            "EventGridTopicKey": "@Microsoft.KeyVault(SecretUrl=https://meatgeek-key-vault.vault.azure.net/secrets/EventGridTopicKey/bd0c96044cf746d7b3c0379f8c5992e9)",
             "CosmosDbAccountEndpointUrl": "[reference(variables('cosmosDbAccountName')).documentEndpoint]",
             "CosmosDbAccountKey": "[listKeys(variables('cosmosDbAccountName'),'2015-04-08').primaryMasterKey]",
             "DatabaseName": "[variables('cosmosDbDatabaseName')]",
