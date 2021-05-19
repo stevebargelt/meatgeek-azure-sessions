@@ -50,7 +50,8 @@ namespace MeatGeek.Sessions.Services
             {
                 Title = title
             };
-            var subject = $"{smokerId}/{SessionId}";
+            //var subject = $"{smokerId}/{SessionId}";
+            var subject = $"/{smokerId}/123456789";
             
             _log.LogInformation("subject = " + subject);
 
@@ -63,7 +64,7 @@ namespace MeatGeek.Sessions.Services
                 _log.LogError("Unhandled exception", ex.ToString());
     
             }
-            
+
             return SessionId;
         }
 
