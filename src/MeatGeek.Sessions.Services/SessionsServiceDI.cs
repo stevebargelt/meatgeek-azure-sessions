@@ -51,7 +51,6 @@ namespace MeatGeek.Sessions.Services
                 Title = title
             };
             var subject = $"{smokerId}/{SessionId}";
-            //var subject = $"{smokerId}/1234";
             
             _log.LogInformation("subject = " + subject);
 
@@ -62,7 +61,6 @@ namespace MeatGeek.Sessions.Services
             catch (Exception ex)
             {
                 _log.LogError(ex, "<-- Exception from SessionsServiceDI");
-    
             }
 
             return SessionId;
