@@ -32,7 +32,7 @@ namespace MeatGeek.Sessions.Services
     
     public class SessionsService : ISessionsService
     {
-        private ILogger<SessionsService> _log;
+        //private ILogger<SessionsService> _log;
         protected ISessionsRepository SessionsRepository;
         protected IEventGridPublisherService EventGridPublisher;
         

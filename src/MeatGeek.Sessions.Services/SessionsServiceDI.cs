@@ -27,9 +27,14 @@ namespace MeatGeek.Sessions.Services
     public class SessionsServiceDI : ISessionsServiceDI
     {
         private ILogger<SessionsServiceDI> _log;
+        protected ISessionsRepository _sessionsRepository;
+        protected IEventGridPublisherServiceDI _eventGridPublisher;
 
-        public SessionsServiceDI(ILogger<SessionsServiceDI> logger)
+
+        public SessionsServiceDI(ISessionsRepository sessionsRepository, IEventGridPublisherServiceDI eventGridPublisher, ILogger<SessionsServiceDI> logger)
         {
+            _sessionsRepository = sessionsRepository;
+            _eventGridPublisher = eventGridPublisher;
             _log = logger;
         }
 
