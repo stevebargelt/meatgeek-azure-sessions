@@ -24,8 +24,14 @@ namespace MeatGeek.Sessions
 {
     public class UpdateSession
     {
-        private const string JsonContentType = "application/json";
-        private static readonly ISessionsService SessionsService = new SessionsService(new SessionsRepository(), new EventGridPublisherService());
+        private readonly ILogger<CreateSession> _log;
+        private readonly ISessionsService _sessionsService; 
+
+        public UpdateSession(ILogger<CreateSession> log, ISessionsService sessionsService)
+        {
+            _log = log;
+            _sessionsService = sessionsService;
+        }
 
         [FunctionName("UpdateSession")]
         [OpenApiOperation(operationId: "UpdateSession", tags: new[] { "session" }, Summary = "Updated an existing session.", Description = "Updates a session (sessions are 'cooks' or BBQ sessions).", Visibility = OpenApiVisibilityType.Important)]
@@ -81,7 +87,7 @@ namespace MeatGeek.Sessions
             // TODO: Add description, startdate, enddate, etc. 
             try
             {
-                var result = await SessionsService.UpdateSessionAsync(data.Id, smokerId, data.Title, data.EndTime.Value);
+                var result = await _sessionsService.UpdateSessionAsync(data.Id, smokerId, data.Title, data.EndTime.Value);
                 if (result == UpdateSessionResult.NotFound)
                 {
                     return new NotFoundResult();

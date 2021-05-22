@@ -31,7 +31,14 @@ namespace MeatGeek.Sessions
     {
 
         private const string JsonContentType = "application/json";
-        private static readonly ISessionsService SessionsService = new SessionsService(new SessionsRepository(), new EventGridPublisherService());
+        private readonly ILogger<CreateSession> _log;
+        private readonly ISessionsService _sessionsService; 
+
+        public GetSessionById(ILogger<CreateSession> log, ISessionsService sessionsService)
+        {
+            _log = log;
+            _sessionsService = sessionsService;
+        }
 
         [FunctionName("GetSessionById")]
         [OpenApiOperation(operationId: "GetSessionById", tags: new[] { "session" }, Summary = "Find Session by ID", Description = "Returns a single session. Sessions are cooking / BBQ Sessions or cooks.", Visibility = OpenApiVisibilityType.Important)]
@@ -59,7 +66,7 @@ namespace MeatGeek.Sessions
             try
             {
                 
-                var document = await SessionsService.GetSessionAsync(id, smokerID);
+                var document = await _sessionsService.GetSessionAsync(id, smokerID);
                 if (document == null)
                 {
                     return new NotFoundResult();
