@@ -37,12 +37,12 @@ namespace MeatGeek.Sessions.Services.Repositories
             return doc.Id;
         }
 
-        public async Task<DeleteSessionResult> DeleteSessionAsync(string SessionId, string userId)
+        public async Task<DeleteSessionResult> DeleteSessionAsync(string SessionId, string smokerId)
         {
             var documentUri = UriFactory.CreateDocumentUri(DatabaseName, CollectionName, SessionId);
             try
             {
-                await DocumentClient.DeleteDocumentAsync(documentUri, new RequestOptions { PartitionKey = new PartitionKey(userId) });
+                await DocumentClient.DeleteDocumentAsync(documentUri, new RequestOptions { PartitionKey = new PartitionKey(smokerId) });
                 return DeleteSessionResult.Success;
             }
             catch (DocumentClientException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
@@ -63,12 +63,12 @@ namespace MeatGeek.Sessions.Services.Repositories
             return DocumentClient.ReplaceDocumentAsync(documentUri, SessionDocument, new RequestOptions { AccessCondition = concurrencyCondition });
         }
 
-        public async Task<SessionDocument> GetSessionAsync(string SessionId, string userId)
+        public async Task<SessionDocument> GetSessionAsync(string SessionId, string smokerId)
         {
             var documentUri = UriFactory.CreateDocumentUri(DatabaseName, CollectionName, SessionId);
             try
             {
-                var documentResponse = await DocumentClient.ReadDocumentAsync<SessionDocument>(documentUri, new RequestOptions { PartitionKey = new PartitionKey(userId) } );
+                var documentResponse = await DocumentClient.ReadDocumentAsync<SessionDocument>(documentUri, new RequestOptions { PartitionKey = new PartitionKey(smokerId) } );
                 return documentResponse.Document;
             }
             catch (DocumentClientException ex) when (ex.StatusCode == HttpStatusCode.NotFound)

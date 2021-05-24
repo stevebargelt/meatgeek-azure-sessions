@@ -5,7 +5,6 @@ namespace MeatGeek.Sessions.Services.Models.Data
 {
     public class SessionDocument
     {
-        // [JsonProperty("partitionKey")] public string PartitionKey => SmokerId;
         [JsonProperty("id")] public string Id { get; set; }
         [JsonProperty] public string SmokerId { get; set; }
         [JsonProperty("_etag")] public string ETag { get; set; }        
