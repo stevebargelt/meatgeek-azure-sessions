@@ -108,7 +108,7 @@ namespace MeatGeek.Sessions.Services
             {
                 Title = title,
             };
-            var subject = $"{smokerId}/{sessionId}";
+            var subject = $"{smokerId}";
             await _eventGridPublisher.PostEventGridEventAsync(EventTypes.Sessions.SessionTitleUpdated, subject, eventData);
 
             return UpdateSessionResult.Success;
@@ -125,6 +125,7 @@ namespace MeatGeek.Sessions.Services
             return new SessionDetails
             {
                 Id = SessionDocument.Id,
+                SmokerId = SessionDocument.SmokerId,
                 Title = SessionDocument.Title,
                 Description = SessionDocument.Description,
                 StartTime = SessionDocument.StartTime,
