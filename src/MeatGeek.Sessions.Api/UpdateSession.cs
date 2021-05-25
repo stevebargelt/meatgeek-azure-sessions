@@ -66,9 +66,10 @@ namespace MeatGeek.Sessions
                 log.LogWarning("UpdateSession: data has no values.");
                 return new BadRequestObjectResult(new { error = "Missing required properties. Nothing to update." });
             }
-            if (!string.IsNullOrEmpty(data["SmokerId"].ToString()))
+            JToken smokerIdToken = data["SmokerId"];
+            if (smokerIdToken != null && smokerIdToken.Type == JTokenType.String && smokerIdToken.ToString() != String.Empty)
             {
-                updateData.SmokerId = data["SmokerId"].ToString();
+                updateData.SmokerId = smokerIdToken.ToString();
                 log.LogInformation($"SmokerId = {updateData.SmokerId}");
             }
             else
@@ -76,20 +77,23 @@ namespace MeatGeek.Sessions
                 log.LogWarning("UpdateSession: data has no SmokerId.");
                 return new BadRequestObjectResult(new { error = "Missing required property: SmokerId is REQUIRED." });
             }
-
-            if (!string.IsNullOrEmpty(data["Title"].ToString()))
+            JToken titleToken = data["Title"];
+            if (titleToken != null && titleToken.Type == JTokenType.String && titleToken.ToString() != String.Empty)
             {
-                updateData.Title = data["Title"].ToString();
+                updateData.Title = titleToken.ToString();
                 log.LogInformation($"Title will be updated to {updateData.Title}");
             }
-            if (!string.IsNullOrEmpty(data["Description"].ToString()))
+            JToken descriptionToken = data["Description"];
+            if (descriptionToken != null && descriptionToken.Type == JTokenType.String && descriptionToken.ToString() != String.Empty)
             {
-                updateData.Description = data["Description"].ToString();
+                updateData.Description = descriptionToken.ToString();
                 log.LogInformation($"Description will be updated to {updateData.Description}");
             }
-            if (!string.IsNullOrEmpty(data["EndTime"].ToString()))
+            JToken endTimeToken = data["EndTime"];
+            log.LogInformation($"endTimeToke Type = {endTimeToken.Type}");
+            if (endTimeToken != null && endTimeToken.Type == JTokenType.String && endTimeToken.ToString() != String.Empty)
             {
-                updateData.EndTime = DateTime.Parse(data["EndTime"].ToString());
+                updateData.EndTime = DateTime.Parse(endTimeToken.ToString());
                 log.LogInformation($"EndTime will be updated to {updateData.EndTime.ToString()}");
             }
             try
