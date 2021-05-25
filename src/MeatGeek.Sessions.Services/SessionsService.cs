@@ -96,6 +96,8 @@ namespace MeatGeek.Sessions.Services
             var SessionDocument = await _sessionsRepository.GetSessionAsync(sessionId, smokerId);
             _log.LogInformation($"SessionsService: AFTER GetSessionAsync ");
             var eventData = new SessionUpdatedEventData{};
+            eventData.Id = sessionId;
+            eventData.SmokerId = smokerId;
 
             if (SessionDocument == null)
             {
