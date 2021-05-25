@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Web.Http;
@@ -95,13 +96,21 @@ namespace MeatGeek.Sessions
             {
                 try 
                 {
-                    updateData.EndTime = DateTime.Parse(endTimeToken.ToString(), null, System.Globalization.DateTimeStyles.RoundtripKind);
+                    // updateData.EndTime = DateTime.Parse(endTimeToken.ToString(), null, System.Globalization.DateTimeStyles.RoundtripKind);
+                    string pattern = "yyyy-MM-dd'T'HH:mm:ss.FFFK";
+                    DateTimeOffset dto = DateTimeOffset.ParseExact(endTimeToken.ToString(), pattern, CultureInfo.InvariantCulture);
+                    updateData.EndTime = dto.UtcDateTime;
                 }
                 catch(ArgumentNullException argNullEx)
                 {
                     log.LogError(argNullEx, $"Argument NUll exception");
                     throw argNullEx;
                 }
+                catch(ArgumentException argEx)
+                {
+                    log.LogError(argEx, $"Argument exception");
+                    throw argEx;
+                }                
                 catch(FormatException formatEx)
                 {
                     log.LogError(formatEx, $"Format exception");
