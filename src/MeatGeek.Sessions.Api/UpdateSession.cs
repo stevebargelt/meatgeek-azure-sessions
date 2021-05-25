@@ -57,42 +57,50 @@ namespace MeatGeek.Sessions
             }
             catch (JsonReaderException)
             {
+                log.LogWarning("UpdateSession: Could not parse JSON");
                 return new BadRequestObjectResult(new { error = "Body should be provided in JSON format." });
             }
-
-            if (data == null || !data.HasValues)
+            log.LogInformation("Made it past data = JObject.Parse(requestBody)");
+            if (!data.HasValues)
             {
+                log.LogWarning("UpdateSession: data has no values.");
                 return new BadRequestObjectResult(new { error = "Missing required properties. Nothing to update." });
             }
             if (!string.IsNullOrEmpty(data["SmokerId"].ToString()))
             {
                 updateData.SmokerId = data["SmokerId"].ToString();
+                log.LogInformation($"SmokerId = {updateData.SmokerId}");
             }
             else
             {
+                log.LogWarning("UpdateSession: data has no SmokerId.");
                 return new BadRequestObjectResult(new { error = "Missing required property: SmokerId is REQUIRED." });
             }
 
             if (!string.IsNullOrEmpty(data["Title"].ToString()))
             {
                 updateData.Title = data["Title"].ToString();
+                log.LogInformation($"Title will be updated to {updateData.Title}");
             }
             if (!string.IsNullOrEmpty(data["Description"].ToString()))
             {
                 updateData.Description = data["Description"].ToString();
+                log.LogInformation($"Description will be updated to {updateData.Description}");
             }
             if (!string.IsNullOrEmpty(data["EndTime"].ToString()))
             {
                 updateData.EndTime = DateTime.Parse(data["EndTime"].ToString());
+                log.LogInformation($"EndTime will be updated to {updateData.EndTime.ToString()}");
             }
             try
             {
                 var result = await _sessionsService.UpdateSessionAsync(id, updateData.SmokerId, updateData.Title, updateData.Description, updateData.EndTime);
                 if (result == UpdateSessionResult.NotFound)
                 {
+                    log.LogWarning($"SessionID {id} not found.");
                     return new NotFoundResult();
                 }
-
+                log.LogInformation("UpdateSession completing");
                 return new NoContentResult();
             }
             catch (Exception ex)
@@ -100,7 +108,6 @@ namespace MeatGeek.Sessions
                 log.LogError("Unhandled exception", ex);
                 return new ExceptionResult(ex, false);
             }
-
 
         }
 
