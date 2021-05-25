@@ -90,10 +90,28 @@ namespace MeatGeek.Sessions
                 log.LogInformation($"Description will be updated to {updateData.Description}");
             }
             JToken endTimeToken = data["EndTime"];
-            log.LogInformation($"endTimeToke Type = {endTimeToken.Type}");
+            log.LogInformation($"endTimeToken Type = {endTimeToken.Type}");
             if (endTimeToken != null && endTimeToken.Type == JTokenType.String && endTimeToken.ToString() != String.Empty)
             {
-                updateData.EndTime = DateTime.Parse(endTimeToken.ToString());
+                try 
+                {
+                    updateData.EndTime = DateTime.Parse(endTimeToken.ToString());
+                }
+                catch(ArgumentNullException argNullEx)
+                {
+                    log.LogError(argNullEx, $"Argument NUll exception");
+                    throw argNullEx;
+                }
+                catch(FormatException formatEx)
+                {
+                    log.LogError(formatEx, $"Format exception");
+                    throw formatEx;
+                }
+                catch(Exception ex)
+                {
+                    log.LogError(ex, $"Unhandled Exception from DateTimeParse");
+                    throw ex;
+                }
                 log.LogInformation($"EndTime will be updated to {updateData.EndTime.ToString()}");
             }
             try
