@@ -81,7 +81,7 @@ namespace MeatGeek.Sessions
                 _log.LogInformation("data.Title = " + data.Title);
                 _log.LogInformation("data.SmokerId = " + data.SmokerId);
                 _log.LogInformation("data.StartTime = " + data.StartTime.Value);
-                var sessionId = await _sessionsService.AddSessionAsync(data.Title, data.SmokerId, data.StartTime.Value);
+                var sessionId = await _sessionsService.AddSessionAsync(data.Title, data.Description, data.SmokerId, data.StartTime.Value);
                 _log.LogInformation("AFTER SessionService Call");
                 return new OkObjectResult(new { id = sessionId });
             }

@@ -16,9 +16,9 @@ namespace MeatGeek.Sessions.Services
 {
     public interface ISessionsService
     {
-        Task<string> AddSessionAsync(string title, string smokerId, DateTime startTime);
+        Task<string> AddSessionAsync(string title, string description, string smokerId, DateTime startTime);
         Task<DeleteSessionResult> DeleteSessionAsync(string SessionId, string smokerId);
-        Task<UpdateSessionResult> UpdateSessionAsync(string SessionId, string smokerId, string name, DateTime endTime);
+        Task<UpdateSessionResult> UpdateSessionAsync(string SessionId, string smokerId, string title, string description, DateTime? endTime);
         Task<SessionDetails> GetSessionAsync(string SessionId, string smokerId);
         Task<SessionSummaries> GetSessionsAsync(string smokerId);
     }
@@ -38,12 +38,13 @@ namespace MeatGeek.Sessions.Services
             _log = logger;
         }
 
-        public async Task<string> AddSessionAsync(string title, string smokerId, DateTime startTime)
+        public async Task<string> AddSessionAsync(string title, string description, string smokerId, DateTime startTime)
         {
             // create the document in Cosmos DB
             var SessionDocument = new SessionDocument
             {
                 Title = title,
+                Description = description,
                 SmokerId = smokerId,
                 StartTime = startTime
             };
@@ -58,7 +59,6 @@ namespace MeatGeek.Sessions.Services
                 Title = title
             };
             var subject = $"{smokerId}";
-            
             _log.LogInformation("subject = " + subject);
 
             try 
@@ -89,27 +89,38 @@ namespace MeatGeek.Sessions.Services
             return DeleteSessionResult.Success;
         }
 
-        public async Task<UpdateSessionResult> UpdateSessionAsync(string sessionId, string smokerId, string title, DateTime endTime)
+        public async Task<UpdateSessionResult> UpdateSessionAsync(string sessionId, string smokerId, string title, string description, DateTime? endTime)
         {
             // get the current version of the document from Cosmos DB
             var SessionDocument = await _sessionsRepository.GetSessionAsync(sessionId, smokerId);
+            var eventData = new SessionUpdatedEventData{};
+
             if (SessionDocument == null)
             {
                 return UpdateSessionResult.NotFound;
             }
 
-            // update the document with the new name
-            SessionDocument.Title = title;
-            SessionDocument.EndTime = endTime;
+            if (!string.IsNullOrEmpty(title))
+            {
+                SessionDocument.Title = title;
+                eventData.Title = title;
+            }
+            if (!string.IsNullOrEmpty(description))
+            {
+                SessionDocument.Description = description;
+                eventData.Description = description;
+            }
+            if (endTime.HasValue)
+            {
+                SessionDocument.EndTime = endTime;
+                eventData.Endtime = endTime;
+            }
+            
             await _sessionsRepository.UpdateSessionAsync(SessionDocument);
 
             // post a SessionNameUpdated event to Event Grid
-            var eventData = new SessionTitleUpdatedEventData
-            {
-                Title = title,
-            };
             var subject = $"{smokerId}";
-            await _eventGridPublisher.PostEventGridEventAsync(EventTypes.Sessions.SessionTitleUpdated, subject, eventData);
+            await _eventGridPublisher.PostEventGridEventAsync(EventTypes.Sessions.SessionUpdated, subject, eventData);
 
             return UpdateSessionResult.Success;
         }

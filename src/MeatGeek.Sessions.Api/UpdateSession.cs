@@ -58,6 +58,11 @@ namespace MeatGeek.Sessions
             }
 
             // validate request
+            if (string.IsNullOrEmpty(data.SmokerId))
+            {
+                return new BadRequestObjectResult(new { error = "Missing required property: SmokerId is REQUIRED." });
+            }
+
             if (data == null)
             {
                 return new BadRequestObjectResult(new { error = "Missing required properties. Nothing to update." });
@@ -70,24 +75,10 @@ namespace MeatGeek.Sessions
             {
                 data.Id = id;
             }
-            // if (string.IsNullOrEmpty(data.Name))
-            // {
-            //     return new BadRequestObjectResult(new { error = "Missing required property 'name'." });
-            // }
 
-            var smokerId = "meatgeek2";
-            //TODO: Get smokerID 
-            // get the user ID
-            // if (! await UserAuthenticationService.GetUserIdAsync(req, out var userId, out var responseResult))
-            // {
-            //     return responseResult;
-            // }
-
-            // update category name
-            // TODO: Add description, startdate, enddate, etc. 
             try
             {
-                var result = await _sessionsService.UpdateSessionAsync(data.Id, smokerId, data.Title, data.EndTime.Value);
+                var result = await _sessionsService.UpdateSessionAsync(data.Id, data.SmokerId, data.Title, data.Description, data.EndTime.Value);
                 if (result == UpdateSessionResult.NotFound)
                 {
                     return new NotFoundResult();
@@ -102,46 +93,6 @@ namespace MeatGeek.Sessions
             }
 
 
-            // string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            // var updatedSession = JsonConvert.DeserializeObject<Session>(requestBody);
-
-            // log.LogInformation("updatedSession.SmokerId = " + updatedSession.SmokerId);
-            // log.LogInformation("updatedSession.PartitionKey = " + updatedSession.PartitionKey);
-            // Uri sessionCollectionUri = UriFactory.CreateDocumentCollectionUri("Sessions", "sessions");
-
-            // var document = client.CreateDocumentQuery(sessionCollectionUri, 
-            //                 new FeedOptions() { PartitionKey = new Microsoft.Azure.Documents.PartitionKey(updatedSession.SmokerId)})
-            //     .Where(t => t.Id == id)
-            //     .AsEnumerable()
-            //     .FirstOrDefault();
-
-            // if (document == null)
-            // {
-            //     log.LogError($"Session {id} not found.");
-            //     return new NotFoundResult();
-            // }
-
-            // if (!string.IsNullOrEmpty(updatedSession.Description))
-            // {
-            //     document.SetPropertyValue("Description", updatedSession.Description);
-            // }
-            // if (!string.IsNullOrEmpty(updatedSession.Title))
-            // {
-            //     document.SetPropertyValue("Title", updatedSession.Title);
-            // }
-            // if (updatedSession.EndTime.HasValue)
-            // {
-            //     document.SetPropertyValue("EndTime", updatedSession.EndTime);
-            // }
-            // if (updatedSession.StartTime.HasValue)
-            // {
-            //     document.SetPropertyValue("StartTime", updatedSession.StartTime);
-            // }
-            // await client.ReplaceDocumentAsync(document);
-
-            // Session updatedSessionDocument = (dynamic)document;
-
-            // return new OkObjectResult(updatedSessionDocument);
         }
 
     }
