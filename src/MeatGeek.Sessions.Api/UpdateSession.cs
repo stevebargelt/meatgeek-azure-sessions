@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 
@@ -19,6 +18,9 @@ using MeatGeek.Sessions.Services.Models.Results;
 using MeatGeek.Sessions.Services.Models.Response;
 using MeatGeek.Sessions.Services.Repositories;
 using MeatGeek.Shared;
+
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace MeatGeek.Sessions
 {
@@ -47,38 +49,45 @@ namespace MeatGeek.Sessions
 
             // get the request body
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            UpdateSessionRequest data;
+            var updateData = new UpdateSessionRequest {};
+            JObject data;
             try
             {
-                data = JsonConvert.DeserializeObject<UpdateSessionRequest>(requestBody);
+                data = JObject.Parse(requestBody);
             }
             catch (JsonReaderException)
             {
                 return new BadRequestObjectResult(new { error = "Body should be provided in JSON format." });
             }
 
-            // validate request
-            if (string.IsNullOrEmpty(data.SmokerId))
+            if (data == null || !data.HasValues)
+            {
+                return new BadRequestObjectResult(new { error = "Missing required properties. Nothing to update." });
+            }
+            if (!string.IsNullOrEmpty(data["SmokerId"].ToString()))
+            {
+                updateData.SmokerId = data["SmokerId"].ToString();
+            }
+            else
             {
                 return new BadRequestObjectResult(new { error = "Missing required property: SmokerId is REQUIRED." });
             }
 
-            if (data == null)
+            if (!string.IsNullOrEmpty(data["Title"].ToString()))
             {
-                return new BadRequestObjectResult(new { error = "Missing required properties. Nothing to update." });
+                updateData.Title = data["Title"].ToString();
             }
-            if (data.Id != null && id != null && data.Id != id)
+            if (!string.IsNullOrEmpty(data["Description"].ToString()))
             {
-                return new BadRequestObjectResult(new { error = "Property 'id' does not match the identifier specified in the URL path." });
+                updateData.Description = data["Description"].ToString();
             }
-            if (string.IsNullOrEmpty(data.Id))
+            if (!string.IsNullOrEmpty(data["EndTime"].ToString()))
             {
-                data.Id = id;
+                updateData.EndTime = DateTime.Parse(data["EndTime"].ToString());
             }
-
             try
             {
-                var result = await _sessionsService.UpdateSessionAsync(data.Id, data.SmokerId, data.Title, data.Description, data.EndTime.Value);
+                var result = await _sessionsService.UpdateSessionAsync(id, updateData.SmokerId, updateData.Title, updateData.Description, updateData.EndTime);
                 if (result == UpdateSessionResult.NotFound)
                 {
                     return new NotFoundResult();
