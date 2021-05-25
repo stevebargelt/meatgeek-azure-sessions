@@ -95,7 +95,7 @@ namespace MeatGeek.Sessions
             {
                 try 
                 {
-                    updateData.EndTime = DateTime.Parse(endTimeToken.ToString());
+                    updateData.EndTime = DateTime.Parse(endTimeToken.ToString(), null, System.Globalization.DateTimeStyles.RoundtripKind);
                 }
                 catch(ArgumentNullException argNullEx)
                 {
