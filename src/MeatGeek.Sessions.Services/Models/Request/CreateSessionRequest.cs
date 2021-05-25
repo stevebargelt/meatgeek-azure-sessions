@@ -5,9 +5,14 @@ namespace MeatGeek.Sessions.Services.Models.Request
 {
     public class CreateSessionRequest
     {
-        [JsonProperty] public string SmokerId { get; set; }
-        [JsonProperty] public string Title { get; set; }
-        [JsonProperty] public string Description { get; set; }
-        [JsonProperty] public DateTime? StartTime { get; set; }
+        [JsonProperty("SmokerId")] 
+        public string SmokerId { get; set; }
+        [JsonProperty("title")] 
+        public string Title { get; set; }
+        [JsonProperty("description")] 
+        public string Description { get; set; }
+        [JsonProperty("starttime")] 
+        public DateTime? StartTime { get; set; }
+             
     }
 }
