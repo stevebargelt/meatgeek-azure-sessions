@@ -18,7 +18,6 @@ namespace MeatGeek.Sessions.Services.Models.Response
         [JsonProperty("endtime")]
         public DateTime? EndTime { get; set; }
         [JsonProperty("timestamp")]
-        public DateTime TimeStamp { get; set; }
-    }        
+        public DateTime TimeStamp { get; set; }    
     }
 }
