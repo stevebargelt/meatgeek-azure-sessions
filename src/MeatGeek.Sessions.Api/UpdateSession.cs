@@ -94,17 +94,19 @@ namespace MeatGeek.Sessions
             log.LogInformation($"endTimeToken Type = {endTimeToken.Type}");
             if (endTimeToken != null && endTimeToken.Type == JTokenType.String && endTimeToken.ToString() != String.Empty)
             {
+                log.LogInformation($"endTime= {endTimeToken.ToString()}");
                 try 
                 {
                     // updateData.EndTime = DateTime.Parse(endTimeToken.ToString(), null, System.Globalization.DateTimeStyles.RoundtripKind);
-                    string[] patterns = 
-                    {
-                        "yyyy-MM-dd'T'HH:mm:ss.FFFzzz",
-                        "yyyy-MM-dd'T'HH:mm:ss.FFF zzz"
-                      // 2021-05-245T04:50:22.000000-07:00
-                    };
+                    // string[] patterns = 
+                    // {
+                    //     "yyyy-MM-dd'T'HH:mm:ss.FFFzzz",
+                    //     "yyyy-MM-dd'T'HH:mm:ss.FFF zzz"
+                    //   // 2021-05-245T04:50:22.000000-07:00
+                    // };
                                    
-                    DateTimeOffset dto = DateTimeOffset.ParseExact(endTimeToken.ToString(), patterns, CultureInfo.InvariantCulture);
+                    DateTimeOffset dto = DateTimeOffset.Parse(endTimeToken.ToString());
+                    //, patterns, CultureInfo.InvariantCulture, DateTimeStyles.None);
                     updateData.EndTime = dto.UtcDateTime;
                 }
                 catch(ArgumentNullException argNullEx)
