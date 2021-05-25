@@ -84,11 +84,19 @@ namespace MeatGeek.Sessions
                 updateData.Title = titleToken.ToString();
                 log.LogInformation($"Title will be updated to {updateData.Title}");
             }
+            else
+            {
+                log.LogInformation($"Title will NOT be updated.");
+            }
             JToken descriptionToken = data["Description"];
             if (descriptionToken != null && descriptionToken.Type == JTokenType.String && descriptionToken.ToString() != String.Empty)
             {
                 updateData.Description = descriptionToken.ToString();
                 log.LogInformation($"Description will be updated to {updateData.Description}");
+            }
+            else
+            {
+                log.LogInformation($"Description will NOT be");
             }
             JToken endTimeToken = data["EndTime"];
             log.LogInformation($"endTimeToken Type = {endTimeToken.Type}");
@@ -102,7 +110,7 @@ namespace MeatGeek.Sessions
                     // {
                     //     "yyyy-MM-dd'T'HH:mm:ss.FFFzzz",
                     //     "yyyy-MM-dd'T'HH:mm:ss.FFF zzz"
-                    //   // 2021-05-245T04:50:22.000000-07:00
+                    //   // 2021-05-24T04:50:22.000000-07:00
                     // };
                                    
                     DateTimeOffset dto = DateTimeOffset.Parse(endTimeToken.ToString());
