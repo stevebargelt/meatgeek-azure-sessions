@@ -100,7 +100,7 @@ namespace MeatGeek.Sessions
             }
             JToken endTimeToken = data["EndTime"];
             log.LogInformation($"endTimeToken Type = {endTimeToken.Type}");
-            if (endTimeToken != null && endTimeToken.Type == JTokenType.String && endTimeToken.ToString() != String.Empty)
+            if (endTimeToken != null && endTimeToken.Type == JTokenType.Date)
             {
                 log.LogInformation($"endTime= {endTimeToken.ToString()}");
                 try 
@@ -138,6 +138,10 @@ namespace MeatGeek.Sessions
                     throw ex;
                 }
                 log.LogInformation($"EndTime will be updated to {updateData.EndTime.ToString()}");
+            }
+            else
+            {
+                log.LogInformation($"EndTime will NOT be updated.");
             }
             try
             {
