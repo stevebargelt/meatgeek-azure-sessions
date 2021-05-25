@@ -68,7 +68,7 @@ namespace MeatGeek.Sessions.Services.Repositories
             var documentUri = UriFactory.CreateDocumentUri(DatabaseName, CollectionName, SessionId);
             try
             {
-                var documentResponse = await DocumentClient.ReadDocumentAsync<SessionDocument>(documentUri); //, new RequestOptions { PartitionKey = new PartitionKey(smokerId) } );
+                var documentResponse = await DocumentClient.ReadDocumentAsync<SessionDocument>(documentUri, new RequestOptions { PartitionKey = new PartitionKey(smokerId) });
                 return documentResponse.Document;
             }
             catch (DocumentClientException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
