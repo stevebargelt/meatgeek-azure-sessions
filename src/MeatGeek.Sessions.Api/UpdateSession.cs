@@ -96,7 +96,7 @@ namespace MeatGeek.Sessions
             }
             else
             {
-                log.LogInformation($"Description will NOT be");
+                log.LogInformation($"Description will NOT be updated");
             }
             JToken endTimeToken = data["EndTime"];
             log.LogInformation($"endTimeToken Type = {endTimeToken.Type}");
@@ -104,17 +104,8 @@ namespace MeatGeek.Sessions
             {
                 log.LogInformation($"endTime= {endTimeToken.ToString()}");
                 try 
-                {
-                    // updateData.EndTime = DateTime.Parse(endTimeToken.ToString(), null, System.Globalization.DateTimeStyles.RoundtripKind);
-                    // string[] patterns = 
-                    // {
-                    //     "yyyy-MM-dd'T'HH:mm:ss.FFFzzz",
-                    //     "yyyy-MM-dd'T'HH:mm:ss.FFF zzz"
-                    //   // 2021-05-24T04:50:22.000000-07:00
-                    // };
-                                   
+                {                                   
                     DateTimeOffset dto = DateTimeOffset.Parse(endTimeToken.ToString());
-                    //, patterns, CultureInfo.InvariantCulture, DateTimeStyles.None);
                     updateData.EndTime = dto.UtcDateTime;
                 }
                 catch(ArgumentNullException argNullEx)
@@ -145,6 +136,7 @@ namespace MeatGeek.Sessions
             }
             try
             {
+                log.LogWarning($"BEFORE: _sessionsService.UpdateSessionAsync");
                 var result = await _sessionsService.UpdateSessionAsync(id, updateData.SmokerId, updateData.Title, updateData.Description, updateData.EndTime);
                 if (result == UpdateSessionResult.NotFound)
                 {
@@ -156,7 +148,7 @@ namespace MeatGeek.Sessions
             }
             catch (Exception ex)
             {
-                log.LogError("Unhandled exception", ex);
+                log.LogError(ex, "Unhandled exception");
                 return new ExceptionResult(ex, false);
             }
 

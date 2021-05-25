@@ -91,8 +91,10 @@ namespace MeatGeek.Sessions.Services
 
         public async Task<UpdateSessionResult> UpdateSessionAsync(string sessionId, string smokerId, string title, string description, DateTime? endTime)
         {
+            _log.LogInformation($"SessionsService: UpdateSessionAsync Called");
             // get the current version of the document from Cosmos DB
             var SessionDocument = await _sessionsRepository.GetSessionAsync(sessionId, smokerId);
+            _log.LogInformation($"SessionsService: AFTER GetSessionAsync ");
             var eventData = new SessionUpdatedEventData{};
 
             if (SessionDocument == null)
