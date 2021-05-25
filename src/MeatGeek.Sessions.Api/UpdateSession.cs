@@ -97,8 +97,14 @@ namespace MeatGeek.Sessions
                 try 
                 {
                     // updateData.EndTime = DateTime.Parse(endTimeToken.ToString(), null, System.Globalization.DateTimeStyles.RoundtripKind);
-                    string pattern = "yyyy-MM-dd'T'HH:mm:ss.FFFK";
-                    DateTimeOffset dto = DateTimeOffset.ParseExact(endTimeToken.ToString(), pattern, CultureInfo.InvariantCulture);
+                    string[] patterns = 
+                    {
+                        "yyyy-MM-dd'T'HH:mm:ss.FFFzzz",
+                        "yyyy-MM-dd'T'HH:mm:ss.FFF zzz"
+                      // 2021-05-245T04:50:22.000000-07:00
+                    };
+                                   
+                    DateTimeOffset dto = DateTimeOffset.ParseExact(endTimeToken.ToString(), patterns, CultureInfo.InvariantCulture);
                     updateData.EndTime = dto.UtcDateTime;
                 }
                 catch(ArgumentNullException argNullEx)
